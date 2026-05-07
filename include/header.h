@@ -41,5 +41,7 @@ public:
 	void AdaugaMuchie(int idNod1, int idNod2, int cost);
 	void DFS(int startNod);
 	void Draw();
+	void SetStare(StareAplicatie stare);
+	StareAplicatie GetStare();
 };
 

@@ -15,6 +15,12 @@ void Graf::Draw() {
 		window.draw(nod);
 	}
 }
+void Graf::SetStare(StareAplicatie stare) {
+	StareCurenta = stare;
+}
+StareAplicatie Graf::GetStare() {
+	return StareCurenta;
+}
 
 Nod::Nod(float x, float y, int index, const sf::Font& font) : id(index), text(font) {
 	cerc.setRadius(radius);
