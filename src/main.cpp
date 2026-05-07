@@ -5,7 +5,8 @@ int main()
 {
 	sf::RenderWindow window( sf::VideoMode( { 800, 600 } ), "SFML works!" );
 	std::vector<std::unique_ptr<ElementGraf> >shapes;
-	float raza = 30.f;
+	sf::Font font("ARIAL.TTF");
+	int counter_noduri = 1;
 	
 
 	while ( window.isOpen() )
@@ -18,7 +19,8 @@ int main()
 				if (mousePressed->button == sf::Mouse::Button::Left) {
 					float x = static_cast<float>(mousePressed->position.x);
 					float y = static_cast<float>(mousePressed->position.y);
-					std::unique_ptr<ElementGraf> shape = std::make_unique<Nod>(x, y);
+					std::unique_ptr<ElementGraf> shape = std::make_unique<Nod>(x, y, counter_noduri, font);
+					counter_noduri++;
 					shapes.push_back(std::move(shape));
 				}
 			}
