@@ -1,47 +1,45 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-
-class ElementGraf : public sf::Drawable {
-public:
-	~ElementGraf() = default;
-	virtual void click() = 0;
+enum StareAplicatie {
+	NEUTRU,
+	ADAUGA_NOD,
+	ADAUGA_MUCHIE1,
+	ADAUGA_MUCHIE2,
+	START_DFS
 };
 
-class Nod : public ElementGraf {
+class Nod : public sf::Drawable {
+	static constexpr double radius = 30.f;
 	sf::CircleShape cerc;
-	int index;
 	sf::Text text;
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override {
-		target.draw(cerc);
-		target.draw(text);
+	int id;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override {
+		target.draw(cerc, states);
+		target.draw(text, states);
 	}
 public:
-	Nod(float x, float y, int index, const sf::Font& font) : index(index), text(font){
-		float raza = 25.f;
+	Nod(float x, float y, int index, const sf::Font& font);
+};
 
-		cerc.setRadius(raza);
-		cerc.setOrigin({ raza, raza });
-		cerc.setPosition({ x, y });
-		cerc.setFillColor(sf::Color::Cyan);
-		cerc.setOutlineColor(sf::Color::Blue);
-		cerc.setOutlineThickness(2);
+class Muchie : public sf::Drawable {
 
-		text.setFont(font);
-		text.setString(std::to_string(index));
-		text.setCharacterSize(18);
-		text.setFillColor(sf::Color::Black);
-		text.setPosition({ x, y });
-
-		sf::FloatRect bounds = text.getLocalBounds();
-		text.setOrigin({
-			bounds.position.x + bounds.size.x / 2.0f,
-			bounds.position.y + bounds.size.y / 2.0f
-			});
+};
 
 
-	}
-	void click() {
-		cerc.setFillColor(sf::Color::Red);
-	}
+class Graf {
+	StareAplicatie StareCurenta;
+	int nrNoduri, nrMuchii;
+	std::vector<Nod> noduri;
+	std::vector<Muchie> muchii;
+
+	std::vector<std::pair<int, int> > matrix;
+	sf::RenderWindow& window;
+	const sf::Font& font;
+public:
+	Graf(sf::RenderWindow& window, const sf::Font& font);
+	void AdaugaNod(float x, float y);
+	void AdaugaMuchie(int idNod1, int idNod2, int cost);
+	void DFS(int startNod);
+	void Draw();
 };
 
