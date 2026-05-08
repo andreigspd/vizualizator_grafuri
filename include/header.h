@@ -8,40 +8,70 @@ enum StareAplicatie {
 	START_DFS
 };
 
-class Nod : public sf::Drawable {
-	static constexpr double radius = 30.f;
-	sf::CircleShape cerc;
+struct Layout {
+	float screenWidth;
+	float screenHeight;
+	float leftMenuWidth;
+	float rightMenuWidth;
+	Layout(float width, float height, float leftwidth, float rightwidth) : screenWidth(width), screenHeight(height),
+		leftMenuWidth(leftwidth), rightMenuWidth(rightwidth) {}
+	float GetCanvasX() const {
+		return leftMenuWidth;
+	}
+	float GetCanvasWidth() const {
+		return screenWidth - leftMenuWidth - rightMenuWidth;
+	}
+};
+
+
+class Buton : public sf::Drawable {
+	static constexpr float width = 200.f;
+	static constexpr float height = 50.f;
+	sf::RectangleShape buton;
 	sf::Text text;
-	int id;
+	StareAplicatie stareButon;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override {
-		target.draw(cerc, states);
+		target.draw(buton, states);
 		target.draw(text, states);
 	}
 public:
-	Nod(float x, float y, int index, const sf::Font& font);
+	Buton(float x, float y, const sf::Font& font, const std::string Text, StareAplicatie stare);
+	bool clickButon(float x, float y) const;
+	StareAplicatie getStareAsociata() const;
+	float GetHeight() const;
 };
 
-class Muchie : public sf::Drawable {
+class Meniu : public sf::Drawable {
+	static constexpr float padding = 20.f;
+	static constexpr sf::Color CuloareFundal = sf::Color(128, 128, 128);
+	sf::RectangleShape fundal;
+	std::vector<Buton> butoane;
+	float nextPositionY;
 
-};
-
-
-class Graf {
-	StareAplicatie StareCurenta;
-	int nrNoduri, nrMuchii;
-	std::vector<Nod> noduri;
-	std::vector<Muchie> muchii;
-
-	std::vector<std::pair<int, int> > matrix;
-	sf::RenderWindow& window;
-	const sf::Font& font;
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override {
+		target.draw(fundal, states);
+		for (const auto& buton : butoane) {
+			target.draw(buton, states);
+		}
+	}
 public:
-	Graf(sf::RenderWindow& window, const sf::Font& font);
-	void AdaugaNod(float x, float y);
-	void AdaugaMuchie(int idNod1, int idNod2, int cost);
-	void DFS(int startNod);
-	void Draw();
-	void SetStare(StareAplicatie stare);
-	StareAplicatie GetStare();
+	Meniu(float x, float y, float width, float height){
+		fundal.setSize({ width, height });
+		fundal.setPosition({ x, y });
+		fundal.setFillColor(CuloareFundal);
+		nextPositionY = y + 50.f;
+	}
+	void AdaugaButon(const sf::Font& font, std::string Text, StareAplicatie stare) {
+		float CentruMeniu = fundal.getPosition().x + fundal.getSize().x / 2.0f;
+		butoane.emplace_back(CentruMeniu, nextPositionY, font, Text, stare);
+		nextPositionY += 20.f + butoane.front().GetHeight();
+	}
+	StareAplicatie VerificaClick(float x, float y) {
+		for (const auto& b : butoane) {
+			if (b.clickButon(x, y)) {
+				return b.getStareAsociata();
+			}
+		}
+		return NEUTRU;
+	}
 };
-

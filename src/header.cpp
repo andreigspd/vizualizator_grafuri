@@ -1,37 +1,18 @@
 #include "../include/header.h"
 #include <SFML/Graphics.hpp>
 
-Graf::Graf(sf::RenderWindow& window, const sf::Font& font) : window(window), font(font){
-	nrNoduri = 0;
-	nrMuchii = 0;
-	StareCurenta = NEUTRU;
-}
-void Graf::AdaugaNod(float x, float y) {
-	noduri.emplace_back(x, y, nrNoduri + 1, font);
-	nrNoduri++;
-}
-void Graf::Draw() {
-	for (auto nod : noduri) {
-		window.draw(nod);
-	}
-}
-void Graf::SetStare(StareAplicatie stare) {
-	StareCurenta = stare;
-}
-StareAplicatie Graf::GetStare() {
-	return StareCurenta;
-}
 
-Nod::Nod(float x, float y, int index, const sf::Font& font) : id(index), text(font) {
-	cerc.setRadius(radius);
-	cerc.setOrigin({ radius, radius });
-	cerc.setPosition({ x, y });
-	cerc.setFillColor(sf::Color::Cyan);
-	cerc.setOutlineColor(sf::Color::Blue);
-	cerc.setOutlineThickness(1);
 
-	text.setString(std::to_string(index));
-	text.setCharacterSize(15);
+Buton::Buton(float x, float y, const sf::Font& font, const std::string Text, StareAplicatie stare) : text(font), stareButon(stare) {
+	buton.setOrigin({ width / 2.0f, height / 2.0f });
+	buton.setFillColor(sf::Color::Red);
+	buton.setOutlineColor(sf::Color(128, 128, 128));
+	buton.setOutlineThickness(2);
+	buton.setSize({ width, height });
+	buton.setPosition({ x, y });
+
+	text.setString(Text);
+	text.setCharacterSize(20);
 	text.setFillColor(sf::Color::Black);
 	const auto bounds = text.getLocalBounds();
 	text.setOrigin({
@@ -39,4 +20,14 @@ Nod::Nod(float x, float y, int index, const sf::Font& font) : id(index), text(fo
 		bounds.position.y + bounds.size.y / 2.0f
 		});
 	text.setPosition({ x, y });
+
+}
+bool Buton::clickButon(float x, float y) const {
+	return buton.getGlobalBounds().contains({ x, y });
+}
+StareAplicatie Buton::getStareAsociata() const {
+	return stareButon;
+}
+float Buton::GetHeight() const {
+	return height;
 }
