@@ -1,6 +1,7 @@
 #pragma once
 #include "../include/header.h"
 #include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
 
 class Nod : public sf::Drawable {
 	static constexpr double radius = 30.f;
@@ -16,6 +17,7 @@ public:
 	bool VerificaClick(float x, float y) const;
 	int GetNodId() const;
 	sf::Vector2f GetNodPosition() const;
+	void SetCuloareNod(CuloareNod color);
 };
 
 class Muchie : public sf::Drawable {
@@ -37,6 +39,7 @@ class Graf {
 	StareAplicatie StareCurenta;
 	int nrNoduri, nrMuchii;
 	std::vector<Nod> noduri;
+	std::unordered_map<int, int>vizitat;
 	std::vector<Muchie> muchii;
 	int nodStart, nodEnd;
 
@@ -60,6 +63,8 @@ public:
 	void SetNodEnd(int id);
 	int GetNodStart() const;
 	int GetNodEnd() const;
+	void ColoreazaNod(int id, CuloareNod color);
 	StareAplicatie GetStare() const;
+	void ResetVizitat();
 };
 

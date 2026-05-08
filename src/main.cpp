@@ -18,6 +18,7 @@ int main()
 	Meniu MeniuStanga(0, 0, layout.leftMenuWidth, layout.screenHeight);
 	Meniu MeniuDreapta(layout.screenWidth - layout.rightMenuWidth, 0, layout.rightMenuWidth, layout.screenHeight);
 
+	MeniuStanga.AdaugaButon(font, "Neutru", NEUTRU_BUTON);
 	MeniuStanga.AdaugaButon(font, "Adauga Nod", ADAUGA_NOD);
 	MeniuStanga.AdaugaButon(font, "Adauga Muchie", ADAUGA_MUCHIE1);
 
@@ -35,7 +36,8 @@ int main()
 						StareNoua = MeniuDreapta.VerificaClick(x, y);
 					}
 					if (StareNoua != NEUTRU) {
-						G.SetStare(StareNoua);
+						if (StareNoua == NEUTRU_BUTON) G.SetStare(NEUTRU);
+						else G.SetStare(StareNoua);
 					}
 					else {
 						if(G.GetStare() == ADAUGA_NOD) G.AdaugaNod(x, y);
@@ -44,6 +46,7 @@ int main()
 							if (nod != -1) {
 								G.SetNodStart(nod);
 								G.SetStare(ADAUGA_MUCHIE2);
+								G.ColoreazaNod(nod, SELECTAT);
 							}
 						}
 						else if (G.GetStare() == ADAUGA_MUCHIE2) {
@@ -51,15 +54,29 @@ int main()
 							if (nod != -1 && nod != G.GetNodStart()) {
 								G.SetNodEnd(nod);
 								G.AdaugaMuchie(G.GetNodStart(), G.GetNodEnd(), 1);
+								G.ColoreazaNod(G.GetNodStart(), NEVIZITAT);
+
 								G.SetNodStart(-1);
 								G.SetNodEnd(-1);
 								G.SetStare(ADAUGA_MUCHIE1);
+							}
+						}
+						else if (G.GetStare() == START_DFS) {
+							int nod = G.VerificaNod(x, y);
+							if (nod != -1) {
+								G.SetNodStart(nod);
+								G.DFS(nod);
+								G.ResetVizitat();
 							}
 						}
 					}
 				}
 			}
 		}
+		StareAplicatie stare = G.GetStare();
+		MeniuStanga.SetCuloareButon(stare);
+		MeniuDreapta.SetCuloareButon(stare);
+
 		window.clear();
 		window.draw(MeniuStanga);
 		window.draw(MeniuDreapta);

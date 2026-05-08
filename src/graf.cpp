@@ -10,6 +10,7 @@ Graf::Graf(sf::RenderWindow& window, const sf::Font& font, const Layout& layout)
 		{ layout.GetCanvasWidth(), layout.screenHeight }
 	);
 	matrix.resize(1001);
+	vizitat.reserve(1001);
 }
 bool Graf::VerificaClick(float x, float y) const {
 	return BlackScreen.contains({ x, y });
@@ -54,6 +55,32 @@ StareAplicatie Graf::GetStare() const{
 	return StareCurenta;
 }
 
+void Graf::ColoreazaNod(int id, CuloareNod color) {
+	noduri[id - 1].SetCuloareNod(color);
+}
+void Graf::DFS(int nod) {
+	vizitat[nod] = 1;
+	noduri[nod - 1].SetCuloareNod(CURENT);
+	window.clear();
+	Draw();
+	window.display();
+	sf::sleep(sf::milliseconds(500));
+
+	for (const auto& i : matrix[nod]) {
+		if (vizitat[i.first] == 0) {
+			DFS(i.first);
+			noduri[nod - 1].SetCuloareNod(CURENT);
+			window.clear(); Draw(); window.display(); sf::sleep(sf::milliseconds(500));
+		}
+	}
+	noduri[nod - 1].SetCuloareNod(VIZITAT);
+	window.clear();
+	Draw();
+	window.display();
+	sf::sleep(sf::milliseconds(500));
+
+}
+
 Nod::Nod(float x, float y, int index, const sf::Font& font) : id(index), text(font) {
 	cerc.setRadius(radius);
 	cerc.setOrigin({ radius, radius });
@@ -89,6 +116,31 @@ int Graf::VerificaNod(float x, float y) const {
 		}
 	}
 	return -1;
+}
+void Graf::ResetVizitat() {
+	for (const auto& i : vizitat) {
+		if (i.second == 1) {
+			noduri[i.first - 1].SetCuloareNod(NEVIZITAT);
+		}
+	}
+	vizitat.clear();
+}
+
+void Nod::SetCuloareNod(CuloareNod color) {
+	switch (color) {
+	case NEUTRU:
+		cerc.setFillColor(sf::Color::Cyan);
+		break;
+	case VIZITAT:
+		cerc.setFillColor(sf::Color::Green);
+		break;
+	case CURENT:
+		cerc.setFillColor(sf::Color::Yellow);
+		break;
+	case SELECTAT:
+		cerc.setFillColor(sf::Color::Red);
+		break;
+	}
 }
 
 Muchie::Muchie(sf::Vector2f poz1, sf::Vector2f poz2, int id1, int id2, int cost, const sf::Font& font) :

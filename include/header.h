@@ -2,10 +2,22 @@
 #include <SFML/Graphics.hpp>
 enum StareAplicatie {
 	NEUTRU,
+	NEUTRU_BUTON,
 	ADAUGA_NOD,
 	ADAUGA_MUCHIE1,
 	ADAUGA_MUCHIE2,
 	START_DFS
+};
+
+enum CuloareNod {
+	NEVIZITAT,
+	SELECTAT,
+	CURENT,
+	VIZITAT
+};
+enum CuloareButon {
+	ACTIV,
+	INACTIV
 };
 
 struct Layout {
@@ -30,6 +42,7 @@ class Buton : public sf::Drawable {
 	sf::RectangleShape buton;
 	sf::Text text;
 	StareAplicatie stareButon;
+
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override {
 		target.draw(buton, states);
 		target.draw(text, states);
@@ -39,6 +52,7 @@ public:
 	bool clickButon(float x, float y) const;
 	StareAplicatie getStareAsociata() const;
 	float GetHeight() const;
+	void SetCuloareButon(CuloareButon color);
 };
 
 class Meniu : public sf::Drawable {
@@ -55,23 +69,8 @@ class Meniu : public sf::Drawable {
 		}
 	}
 public:
-	Meniu(float x, float y, float width, float height){
-		fundal.setSize({ width, height });
-		fundal.setPosition({ x, y });
-		fundal.setFillColor(CuloareFundal);
-		nextPositionY = y + 50.f;
-	}
-	void AdaugaButon(const sf::Font& font, std::string Text, StareAplicatie stare) {
-		float CentruMeniu = fundal.getPosition().x + fundal.getSize().x / 2.0f;
-		butoane.emplace_back(CentruMeniu, nextPositionY, font, Text, stare);
-		nextPositionY += 20.f + butoane.front().GetHeight();
-	}
-	StareAplicatie VerificaClick(float x, float y) {
-		for (const auto& b : butoane) {
-			if (b.clickButon(x, y)) {
-				return b.getStareAsociata();
-			}
-		}
-		return NEUTRU;
-	}
+	Meniu(float x, float y, float width, float height);
+	void AdaugaButon(const sf::Font& font, std::string Text, StareAplicatie stare);
+	StareAplicatie VerificaClick(float x, float y);
+	void SetCuloareButon(StareAplicatie StareCurenta);
 };
