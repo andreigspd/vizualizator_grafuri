@@ -20,7 +20,7 @@ int main()
 
 	MeniuStanga.AdaugaButon(font, "Neutru", NEUTRU_BUTON);
 	MeniuStanga.AdaugaButon(font, "Adauga Nod", ADAUGA_NOD);
-	MeniuStanga.AdaugaButon(font, "Adauga Muchie", ADAUGA_MUCHIE1);
+	MeniuStanga.AdaugaButon(font, "Adauga Muchie", ADAUGA_MUCHIE);
 
 	MeniuDreapta.AdaugaButon(font, "Start DFS", START_DFS);
 	while (window.isOpen()) {
@@ -41,24 +41,20 @@ int main()
 					}
 					else {
 						if(G.GetStare() == ADAUGA_NOD) G.AdaugaNod(x, y);
-						else if (G.GetStare() == ADAUGA_MUCHIE1) {
+						else if (G.GetStare() == ADAUGA_MUCHIE) {
 							int nod = G.VerificaNod(x, y);
 							if (nod != -1) {
-								G.SetNodStart(nod);
-								G.SetStare(ADAUGA_MUCHIE2);
-								G.ColoreazaNod(nod, SELECTAT);
-							}
-						}
-						else if (G.GetStare() == ADAUGA_MUCHIE2) {
-							int nod = G.VerificaNod(x, y);
-							if (nod != -1 && nod != G.GetNodStart()) {
-								G.SetNodEnd(nod);
-								G.AdaugaMuchie(G.GetNodStart(), G.GetNodEnd(), 1);
-								G.ColoreazaNod(G.GetNodStart(), NEVIZITAT);
-
-								G.SetNodStart(-1);
-								G.SetNodEnd(-1);
-								G.SetStare(ADAUGA_MUCHIE1);
+								if (G.GetNodStart() == -1) {
+									G.SetNodStart(nod);
+									G.ColoreazaNod(nod, SELECTAT);
+								}
+								else if (nod != G.GetNodStart()) {
+									G.SetNodEnd(nod);
+									G.AdaugaMuchie(G.GetNodStart(), G.GetNodEnd(), 1);
+									G.ColoreazaNod(G.GetNodStart(), NEVIZITAT);
+									G.SetNodStart(-1);
+									G.SetNodEnd(-1);
+								}
 							}
 						}
 						else if (G.GetStare() == START_DFS) {
