@@ -39,6 +39,23 @@ int main()
 					}
 					else {
 						if(G.GetStare() == ADAUGA_NOD) G.AdaugaNod(x, y);
+						else if (G.GetStare() == ADAUGA_MUCHIE1) {
+							int nod = G.VerificaNod(x, y);
+							if (nod != -1) {
+								G.SetNodStart(nod);
+								G.SetStare(ADAUGA_MUCHIE2);
+							}
+						}
+						else if (G.GetStare() == ADAUGA_MUCHIE2) {
+							int nod = G.VerificaNod(x, y);
+							if (nod != -1 && nod != G.GetNodStart()) {
+								G.SetNodEnd(nod);
+								G.AdaugaMuchie(G.GetNodStart(), G.GetNodEnd(), 1);
+								G.SetNodStart(-1);
+								G.SetNodEnd(-1);
+								G.SetStare(ADAUGA_MUCHIE1);
+							}
+						}
 					}
 				}
 			}
