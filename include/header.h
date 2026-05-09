@@ -1,41 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "../include/util.h"
 class Graf;
-
-enum StareAplicatie {
-	NEUTRU,
-	NEUTRU_BUTON,
-	ADAUGA_NOD,
-	ADAUGA_MUCHIE,
-	START_DFS
-};
-
-enum CuloareNod {
-	NEVIZITAT,
-	SELECTAT,
-	CURENT,
-	VIZITAT
-};
-enum CuloareButon {
-	ACTIV,
-	INACTIV
-};
-
-struct Layout {
-	float screenWidth;
-	float screenHeight;
-	float leftMenuWidth;
-	float rightMenuWidth;
-	Layout(float width, float height, float leftwidth, float rightwidth) : screenWidth(width), screenHeight(height),
-		leftMenuWidth(leftwidth), rightMenuWidth(rightwidth) {}
-	float GetCanvasX() const {
-		return leftMenuWidth;
-	}
-	float GetCanvasWidth() const {
-		return screenWidth - leftMenuWidth - rightMenuWidth;
-	}
-};
-
 
 
 class Buton : public sf::Drawable {
@@ -57,6 +23,7 @@ public:
 	void SetCuloareButon(CuloareButon color);
 };
 
+
 class Meniu : public sf::Drawable {
 	static constexpr float padding = 20.f;
 	static constexpr sf::Color CuloareFundal = sf::Color(128, 128, 128);
@@ -75,6 +42,16 @@ public:
 	void AdaugaButon(const sf::Font& font, std::string Text, StareAplicatie stare);
 	StareAplicatie VerificaClick(float x, float y);
 	void SetCuloareButon(StareAplicatie StareCurenta);
+};
+
+class MeniuStanga : public Meniu {
+public:
+	MeniuStanga(const Layout& layout, const sf::Font& font);
+};
+
+class MeniuDreapta : public Meniu {
+public:
+	MeniuDreapta(const Layout& layout, const sf::Font& font);
 };
 
 class ManagerEvenimente {

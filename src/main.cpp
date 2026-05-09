@@ -15,16 +15,10 @@ int main()
 	);
 
 	Graf G(window, font, layout);
-	Meniu MeniuStanga(0, 0, layout.leftMenuWidth, layout.screenHeight);
-	Meniu MeniuDreapta(layout.screenWidth - layout.rightMenuWidth, 0, layout.rightMenuWidth, layout.screenHeight);
-
-	MeniuStanga.AdaugaButon(font, "Neutru", NEUTRU_BUTON);
-	MeniuStanga.AdaugaButon(font, "Adauga Nod", ADAUGA_NOD);
-	MeniuStanga.AdaugaButon(font, "Adauga Muchie", ADAUGA_MUCHIE);
-
-	MeniuDreapta.AdaugaButon(font, "Start DFS", START_DFS);
-
-	ManagerEvenimente inputManager(G, MeniuStanga, MeniuDreapta, window);
+	MeniuStanga meniuStanga(layout, font);
+	MeniuDreapta meniuDreapta(layout, font);
+	
+	ManagerEvenimente inputManager(G, meniuStanga, meniuDreapta, window);
 	while (window.isOpen()) {
 		while (const auto event = window.pollEvent()) {
 			if (event->is<sf::Event::Closed>()) window.close();
@@ -38,8 +32,8 @@ int main()
 		}
 		inputManager.Update();
 		window.clear();
-		window.draw(MeniuStanga);
-		window.draw(MeniuDreapta);
+		window.draw(meniuStanga);
+		window.draw(meniuDreapta);
 		G.Draw();
 		window.display();
 	}

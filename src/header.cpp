@@ -2,8 +2,8 @@
 #include "../include/graf.h"
 #include <SFML/Graphics.hpp>
 
-
-
+// FUNCTII BUTON ----------->
+// CONSTRUCTOR
 Buton::Buton(float x, float y, const sf::Font& font, const std::string Text, StareAplicatie stare) : 
 	text(font), stareButon(stare) {
 	buton.setOrigin({ width / 2.0f, height / 2.0f });
@@ -24,15 +24,19 @@ Buton::Buton(float x, float y, const sf::Font& font, const std::string Text, Sta
 	text.setPosition({ x, y });
 
 }
+// VF DACA COORDONATELE CLICKULUI SUNT IN INTERIORUL BUTONULUI
 bool Buton::clickButon(float x, float y) const {
 	return buton.getGlobalBounds().contains({ x, y });
 }
+// GET STARE
 StareAplicatie Buton::getStareAsociata() const {
 	return stareButon;
 }
+// GET HEIGHT
 float Buton::GetHeight() const {
 	return height;
 }
+// SET CULOARE
 void Buton::SetCuloareButon(CuloareButon color) {
 	switch (color) {
 	case ACTIV:
@@ -42,18 +46,24 @@ void Buton::SetCuloareButon(CuloareButon color) {
 		buton.setFillColor(sf::Color::Red);
 	}
 }
+// <----------------- END FUNCTII BUTON
 
+// FUNCTII MENIU --------------->
+
+//CONSTRUCTOR
 Meniu::Meniu(float x, float y, float width, float height) {
 	fundal.setSize({ width, height });
 	fundal.setPosition({ x, y });
 	fundal.setFillColor(CuloareFundal);
 	nextPositionY = y + 50.f;
 }
+//ADAUGARE BUTON
 void Meniu::AdaugaButon(const sf::Font& font, std::string Text, StareAplicatie stare) {
 	float CentruMeniu = fundal.getPosition().x + fundal.getSize().x / 2.0f;
 	butoane.emplace_back(CentruMeniu, nextPositionY, font, Text, stare);
 	nextPositionY += 20.f + butoane.front().GetHeight();
 }
+//VERIFICA CLICK 
 StareAplicatie Meniu::VerificaClick(float x, float y) {
 	for (const auto& b : butoane) {
 		if (b.clickButon(x, y)) {
@@ -62,6 +72,7 @@ StareAplicatie Meniu::VerificaClick(float x, float y) {
 	}
 	return NEUTRU;
 }
+//SET CULOARE
 void Meniu::SetCuloareButon(StareAplicatie StareCurenta) {
 	for (auto& buton : butoane) {
 		if (buton.getStareAsociata() == StareCurenta) {
@@ -73,8 +84,25 @@ void Meniu::SetCuloareButon(StareAplicatie StareCurenta) {
 	}
 }
 
+MeniuStanga::MeniuStanga(const Layout& layout, const sf::Font& font) :
+		Meniu(0, 0, layout.leftMenuWidth, layout.screenHeight) {
+	AdaugaButon(font, "Neutru", NEUTRU_BUTON);
+	AdaugaButon(font, "Adauga Nod", ADAUGA_NOD);
+	AdaugaButon(font, "Adauga Muchie", ADAUGA_MUCHIE);
+}
+
+MeniuDreapta::MeniuDreapta(const Layout& layout, const sf::Font& font) :
+	Meniu(layout.screenWidth - layout.rightMenuWidth, 0, layout.rightMenuWidth, layout.screenHeight) {
+	AdaugaButon(font, "DFS", START_DFS);
+}
+// <----------------- END FUNCTII MENIU
+
+// FUNCTII MANAGER CLICK ------------------------->
+
+//CONSTRUCTOR
 ManagerEvenimente::ManagerEvenimente(Graf& graf, Meniu& stanga, Meniu& dreapta, sf::RenderWindow& window) :
 	G(graf), meniuStanga(stanga), meniuDreapta(dreapta), window(window) {}
+//PROCESS CLICK
 void ManagerEvenimente::ProceseazaClick(float x, float y) {
 	StareAplicatie StareNoua = NEUTRU;
 	StareNoua = meniuStanga.VerificaClick(x, y);
@@ -123,6 +151,7 @@ void ManagerEvenimente::ProceseazaClick(float x, float y) {
 		}
 	}
 }
+//UPDADTE MENIURI
 void ManagerEvenimente::Update() {
 	StareAplicatie stareaAcum = G.GetStare();
 	if (stareaAcum == NEUTRU) {
@@ -133,3 +162,5 @@ void ManagerEvenimente::Update() {
 	meniuStanga.SetCuloareButon(stareaAcum);
 	meniuDreapta.SetCuloareButon(stareaAcum);
 }
+
+// <------------------ END FUNCTII MANAGER CLICK

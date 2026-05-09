@@ -1,5 +1,7 @@
 #include "../include/graf.h"
 
+// METODE CLASA GRAF -------------------->
+//CONSTRUCTOR
 Graf::Graf(sf::RenderWindow& window, const sf::Font& font, const Layout& layout) : window(window), font(font){
 	nrNoduri = 0;
 	nrMuchii = 0;
@@ -12,14 +14,17 @@ Graf::Graf(sf::RenderWindow& window, const sf::Font& font, const Layout& layout)
 	matrix.resize(1001);
 	vizitat.reserve(1001);
 }
+//VERIFICA CLICK IN ZONA DESENARE
 bool Graf::VerificaClick(float x, float y) const {
 	return BlackScreen.contains({ x, y });
 }
+//ADAUGA NOD GRAF
 void Graf::AdaugaNod(float x, float y) {
 	if (VerificaClick(x, y) == 0) return;
 	noduri.emplace_back(x, y, nrNoduri + 1, font);
 	nrNoduri++;
 }
+//ADAUGA MUCHIE
 void Graf::AdaugaMuchie(int nodStart, int nodEnd, int cost) {
 	matrix[nodStart].push_back({ nodEnd, cost });
 	matrix[nodEnd].push_back({ nodStart, cost });
@@ -27,6 +32,7 @@ void Graf::AdaugaMuchie(int nodStart, int nodEnd, int cost) {
 	sf::Vector2f poz2 = noduri[nodEnd - 1].GetNodPosition();
 	muchii.emplace_back(poz1, poz2, nodStart, nodEnd, cost, font);
 }
+//DESENARE MUCHII + NODURI
 void Graf::Draw() const {
 	for (const auto& muchie : muchii) {
 		window.draw(muchie);
@@ -35,29 +41,11 @@ void Graf::Draw() const {
 		window.draw(nod);
 	}
 }
-void Graf::SetStare(StareAplicatie stare) {
-	StareCurenta = stare;
-}
-void Graf::SetNodStart(int id) {
-	nodStart = id;
-}
-void Graf::SetNodEnd(int id) {
-	nodEnd = id;
-}
-int Graf::GetNodEnd() const {
-	return nodEnd;
-}
-int Graf::GetNodStart() const {
-	return nodStart;
-}
-
-StareAplicatie Graf::GetStare() const{
-	return StareCurenta;
-}
-
+//COLORARE NOD PARCURGERI
 void Graf::ColoreazaNod(int id, CuloareNod color) {
 	noduri[id - 1].SetCuloareNod(color);
 }
+//DFS
 void Graf::DFS(int nod, const std::function<void()>& renderScene) {
 	vizitat[nod] = 1;
 	noduri[nod - 1].SetCuloareNod(CURENT);
@@ -77,7 +65,51 @@ void Graf::DFS(int nod, const std::function<void()>& renderScene) {
 	sf::sleep(sf::milliseconds(500));
 
 }
+//VERIFICA CLICK PE UN NOD
+int Graf::VerificaNod(float x, float y) const {
+	for (const auto& nod : noduri) {
+		if (nod.VerificaClick(x, y)) {
+			return nod.GetNodId();
+		}
+	}
+	return -1;
+}
+//RESET FRECVENTA VIZITAT
+void Graf::ResetVizitat() {
+	for (const auto& i : vizitat) {
+		if (i.second == 1) {
+			noduri[i.first - 1].SetCuloareNod(NEVIZITAT);
+		}
+	}
+	vizitat.clear();
+}
 
+//SETERI -------------------
+void Graf::SetStare(StareAplicatie stare) {
+	StareCurenta = stare;
+}
+void Graf::SetNodStart(int id) {
+	nodStart = id;
+}
+void Graf::SetNodEnd(int id) {
+	nodEnd = id;
+}
+// -------------------------
+// GETERI -----------------
+int Graf::GetNodEnd() const {
+	return nodEnd;
+}
+int Graf::GetNodStart() const {
+	return nodStart;
+}
+
+StareAplicatie Graf::GetStare() const{
+	return StareCurenta;
+}
+// -------------------------------
+
+//METODE CLASA NOD ---------------------------->
+//CONSTRUCTOR
 Nod::Nod(float x, float y, int index, const sf::Font& font) : id(index), text(font) {
 	cerc.setRadius(radius);
 	cerc.setOrigin({ radius, radius });
@@ -96,33 +128,23 @@ Nod::Nod(float x, float y, int index, const sf::Font& font) : id(index), text(fo
 		});
 	text.setPosition({ x, y });
 }
-int Nod::GetNodId() const {
-	return id;
-}
+
+//VERIFICA CLICK PE NOD RESPECTIV
 bool Nod::VerificaClick(float x, float y) const {
 	return cerc.getGlobalBounds().contains({ x, y });
 }
+
+// GETERI ->>>>>>>>>>>
+int Nod::GetNodId() const {
+	return id;
+}
+
 sf::Vector2f Nod::GetNodPosition() const {
 	return cerc.getPosition();
 }
+// --------------------------
 
-int Graf::VerificaNod(float x, float y) const {
-	for (const auto& nod : noduri) {
-		if (nod.VerificaClick(x, y)) {
-			return nod.GetNodId();
-		}
-	}
-	return -1;
-}
-void Graf::ResetVizitat() {
-	for (const auto& i : vizitat) {
-		if (i.second == 1) {
-			noduri[i.first - 1].SetCuloareNod(NEVIZITAT);
-		}
-	}
-	vizitat.clear();
-}
-
+// SETERI ----------------->
 void Nod::SetCuloareNod(CuloareNod color) {
 	switch (color) {
 	case NEVIZITAT:
@@ -139,7 +161,10 @@ void Nod::SetCuloareNod(CuloareNod color) {
 		break;
 	}
 }
+// -----------------------------------
 
+// METODE CLASA MUCHIE ---------------->
+//CONSTRUCTOR
 Muchie::Muchie(sf::Vector2f poz1, sf::Vector2f poz2, int id1, int id2, int cost, const sf::Font& font) :
 	costText(font), idNod1(id1), idNod2(id2), cost(cost) {
 	float dx = poz2.x - poz1.x;

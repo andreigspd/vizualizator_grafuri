@@ -2,9 +2,7 @@
 #include "../include/header.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
-#include <functional>
-#include <cmath>
-#include <unordered_map>
+
 
 class Nod : public sf::Drawable {
 	static constexpr double radius = 30.f;
