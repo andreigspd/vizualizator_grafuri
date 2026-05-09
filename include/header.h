@@ -1,5 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+class Graf;
+
 enum StareAplicatie {
 	NEUTRU,
 	NEUTRU_BUTON,
@@ -33,6 +35,7 @@ struct Layout {
 		return screenWidth - leftMenuWidth - rightMenuWidth;
 	}
 };
+
 
 
 class Buton : public sf::Drawable {
@@ -73,3 +76,15 @@ public:
 	StareAplicatie VerificaClick(float x, float y);
 	void SetCuloareButon(StareAplicatie StareCurenta);
 };
+
+class ManagerEvenimente {
+	Graf& G;
+	Meniu& meniuStanga;
+	Meniu& meniuDreapta;
+	sf::RenderWindow& window;
+public:
+	ManagerEvenimente(Graf& graf, Meniu& stanga, Meniu& dreapta, sf::RenderWindow& window);
+	void ProceseazaClick(float x, float y);
+	void Update();
+};
+

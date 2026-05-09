@@ -1,4 +1,5 @@
 #include "../include/header.h"
+#include "../include/graf.h"
 #include <SFML/Graphics.hpp>
 
 
@@ -70,4 +71,65 @@ void Meniu::SetCuloareButon(StareAplicatie StareCurenta) {
 			buton.SetCuloareButon(INACTIV);
 		}
 	}
+}
+
+ManagerEvenimente::ManagerEvenimente(Graf& graf, Meniu& stanga, Meniu& dreapta, sf::RenderWindow& window) :
+	G(graf), meniuStanga(stanga), meniuDreapta(dreapta), window(window) {}
+void ManagerEvenimente::ProceseazaClick(float x, float y) {
+	StareAplicatie StareNoua = NEUTRU;
+	StareNoua = meniuStanga.VerificaClick(x, y);
+	if (StareNoua == NEUTRU) {
+		StareNoua = meniuDreapta.VerificaClick(x, y);
+	}
+	if (StareNoua != NEUTRU) {
+		if (G.GetNodStart() != -1) {
+			G.ColoreazaNod(G.GetNodStart(), NEVIZITAT);
+			G.SetNodStart(-1);
+		}
+		if (StareNoua == NEUTRU_BUTON) G.SetStare(NEUTRU);
+		else G.SetStare(StareNoua);
+	}
+	else {
+		if (G.GetStare() == ADAUGA_NOD) G.AdaugaNod(x, y);
+		else if (G.GetStare() == ADAUGA_MUCHIE) {
+			int nod = G.VerificaNod(x, y);
+			if (nod != -1) {
+				if (G.GetNodStart() == -1) {
+					G.SetNodStart(nod);
+					G.ColoreazaNod(nod, SELECTAT);
+				}
+				else if (nod != G.GetNodStart()) {
+					G.SetNodEnd(nod);
+					G.AdaugaMuchie(G.GetNodStart(), G.GetNodEnd(), 1);
+					G.ColoreazaNod(G.GetNodStart(), NEVIZITAT);
+					G.SetNodStart(-1);
+					G.SetNodEnd(-1);
+				}
+			}
+		}
+		else if (G.GetStare() == START_DFS) {
+			int nod = G.VerificaNod(x, y);
+			if (nod != -1) {
+				G.SetNodStart(nod);
+				G.DFS(nod, [&]() {
+					window.clear();
+					window.draw(meniuStanga);
+					window.draw(meniuDreapta);
+					G.Draw();
+					window.display();
+					});
+				G.ResetVizitat();
+			}
+		}
+	}
+}
+void ManagerEvenimente::Update() {
+	StareAplicatie stareaAcum = G.GetStare();
+	if (stareaAcum == NEUTRU) {
+		meniuStanga.SetCuloareButon(NEUTRU_BUTON);
+		meniuDreapta.SetCuloareButon(NEUTRU_BUTON);
+		return;
+	}
+	meniuStanga.SetCuloareButon(stareaAcum);
+	meniuDreapta.SetCuloareButon(stareaAcum);
 }

@@ -23,6 +23,8 @@ int main()
 	MeniuStanga.AdaugaButon(font, "Adauga Muchie", ADAUGA_MUCHIE);
 
 	MeniuDreapta.AdaugaButon(font, "Start DFS", START_DFS);
+
+	ManagerEvenimente inputManager(G, MeniuStanga, MeniuDreapta, window);
 	while (window.isOpen()) {
 		while (const auto event = window.pollEvent()) {
 			if (event->is<sf::Event::Closed>()) window.close();
@@ -30,60 +32,17 @@ int main()
 				if (mouseClicked->button == sf::Mouse::Button::Left) {
 					float x = static_cast<float>(mouseClicked->position.x);
 					float y = static_cast<float>(mouseClicked->position.y);
-					StareAplicatie StareNoua = NEUTRU;
-					StareNoua = MeniuStanga.VerificaClick(x, y);
-					if (StareNoua == NEUTRU) {
-						StareNoua = MeniuDreapta.VerificaClick(x, y);
-					}
-					if (StareNoua != NEUTRU) {
-						if (StareNoua == NEUTRU_BUTON) G.SetStare(NEUTRU);
-						else G.SetStare(StareNoua);
-					}
-					else {
-						if(G.GetStare() == ADAUGA_NOD) G.AdaugaNod(x, y);
-						else if (G.GetStare() == ADAUGA_MUCHIE) {
-							int nod = G.VerificaNod(x, y);
-							if (nod != -1) {
-								if (G.GetNodStart() == -1) {
-									G.SetNodStart(nod);
-									G.ColoreazaNod(nod, SELECTAT);
-								}
-								else if (nod != G.GetNodStart()) {
-									G.SetNodEnd(nod);
-									G.AdaugaMuchie(G.GetNodStart(), G.GetNodEnd(), 1);
-									G.ColoreazaNod(G.GetNodStart(), NEVIZITAT);
-									G.SetNodStart(-1);
-									G.SetNodEnd(-1);
-								}
-							}
-						}
-						else if (G.GetStare() == START_DFS) {
-							int nod = G.VerificaNod(x, y);
-							if (nod != -1) {
-								G.SetNodStart(nod);
-								G.DFS(nod, [&]() {
-									window.clear();
-									window.draw(MeniuStanga);
-									window.draw(MeniuDreapta);
-									G.Draw();
-									window.display();
-									});
-								G.ResetVizitat();
-							}
-						}
-					}
+					inputManager.ProceseazaClick(x, y);
 				}
 			}
 		}
-		StareAplicatie stare = G.GetStare();
-		MeniuStanga.SetCuloareButon(stare);
-		MeniuDreapta.SetCuloareButon(stare);
-
+		inputManager.Update();
 		window.clear();
 		window.draw(MeniuStanga);
 		window.draw(MeniuDreapta);
 		G.Draw();
 		window.display();
 	}
-
 }
+
+

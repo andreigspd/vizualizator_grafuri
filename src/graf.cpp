@@ -125,7 +125,7 @@ void Graf::ResetVizitat() {
 
 void Nod::SetCuloareNod(CuloareNod color) {
 	switch (color) {
-	case NEUTRU:
+	case NEVIZITAT:
 		cerc.setFillColor(sf::Color::Cyan);
 		break;
 	case VIZITAT:
