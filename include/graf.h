@@ -54,7 +54,7 @@ public:
 	Graf(sf::RenderWindow& window, const sf::Font& font, const Layout& layout);
 	void AdaugaNod(float x, float y);
 	void AdaugaMuchie(int idNod1, int idNod2, int cost);
-	void DFS(int startNod);
+	void DFS(int startNod, const std::function<void()>& renderScene);
 	void Draw() const;
 	bool VerificaClick(float x, float y) const;
 	int VerificaNod(float x, float y) const;

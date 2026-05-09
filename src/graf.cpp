@@ -58,25 +58,22 @@ StareAplicatie Graf::GetStare() const{
 void Graf::ColoreazaNod(int id, CuloareNod color) {
 	noduri[id - 1].SetCuloareNod(color);
 }
-void Graf::DFS(int nod) {
+void Graf::DFS(int nod, const std::function<void()>& renderScene) {
 	vizitat[nod] = 1;
 	noduri[nod - 1].SetCuloareNod(CURENT);
-	window.clear();
-	Draw();
-	window.display();
+	renderScene();
 	sf::sleep(sf::milliseconds(500));
 
 	for (const auto& i : matrix[nod]) {
 		if (vizitat[i.first] == 0) {
-			DFS(i.first);
+			DFS(i.first, renderScene);
 			noduri[nod - 1].SetCuloareNod(CURENT);
-			window.clear(); Draw(); window.display(); sf::sleep(sf::milliseconds(500));
+			renderScene();
+			sf::sleep(sf::milliseconds(500));
 		}
 	}
 	noduri[nod - 1].SetCuloareNod(VIZITAT);
-	window.clear();
-	Draw();
-	window.display();
+	renderScene();
 	sf::sleep(sf::milliseconds(500));
 
 }

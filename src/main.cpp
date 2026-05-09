@@ -61,7 +61,13 @@ int main()
 							int nod = G.VerificaNod(x, y);
 							if (nod != -1) {
 								G.SetNodStart(nod);
-								G.DFS(nod);
+								G.DFS(nod, [&]() {
+									window.clear();
+									window.draw(MeniuStanga);
+									window.draw(MeniuDreapta);
+									G.Draw();
+									window.display();
+									});
 								G.ResetVizitat();
 							}
 						}
