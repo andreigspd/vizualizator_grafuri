@@ -59,9 +59,16 @@ class ManagerEvenimente {
 	Meniu& meniuStanga;
 	Meniu& meniuDreapta;
 	sf::RenderWindow& window;
+	const sf::Font& font;
+
+	std::string inputCost = "";
+	sf::RectangleShape inputBox;
+	sf::Text inputText;
 public:
-	ManagerEvenimente(Graf& graf, Meniu& stanga, Meniu& dreapta, sf::RenderWindow& window);
+	ManagerEvenimente(Graf& graf, Meniu& stanga, Meniu& dreapta, sf::RenderWindow& window, const sf::Font& font);
 	void ProceseazaClick(float x, float y);
+	void ProceseazaTastatura(int c);
 	void Update();
+	void DrawInputBox();
 };
 

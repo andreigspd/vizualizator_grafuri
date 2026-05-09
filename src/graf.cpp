@@ -1,5 +1,5 @@
 #include "../include/graf.h"
-
+#include <queue>
 // METODE CLASA GRAF -------------------->
 //CONSTRUCTOR
 Graf::Graf(sf::RenderWindow& window, const sf::Font& font, const Layout& layout) : window(window), font(font){
@@ -26,11 +26,35 @@ void Graf::AdaugaNod(float x, float y) {
 }
 //ADAUGA MUCHIE
 void Graf::AdaugaMuchie(int nodStart, int nodEnd, int cost) {
-	matrix[nodStart].push_back({ nodEnd, cost });
-	matrix[nodEnd].push_back({ nodStart, cost });
-	sf::Vector2f poz1 = noduri[nodStart - 1].GetNodPosition();
-	sf::Vector2f poz2 = noduri[nodEnd - 1].GetNodPosition();
-	muchii.emplace_back(poz1, poz2, nodStart, nodEnd, cost, font);
+	bool existaMuchie = false;
+	for (auto& i : matrix[nodStart]) {
+		if (i.first == nodEnd) {
+			i.second = cost;
+			existaMuchie = true;
+			break;
+		}
+	}
+	if (existaMuchie) {
+		for (auto& i : matrix[nodEnd]) {
+			if (i.first == nodStart) {
+				i.second = cost;
+			}
+		}
+		for (auto& muchie : muchii) {
+			if ((muchie.GetId1() == nodStart && muchie.GetId2() == nodEnd) ||
+				(muchie.GetId1() == nodEnd && muchie.GetId2() == nodStart)) {
+				muchie.SetCost(cost);
+				break;
+			}
+		}
+	}
+	else {
+		matrix[nodStart].push_back({ nodEnd, cost });
+		matrix[nodEnd].push_back({ nodStart, cost });
+		sf::Vector2f poz1 = noduri[nodStart - 1].GetNodPosition();
+		sf::Vector2f poz2 = noduri[nodEnd - 1].GetNodPosition();
+		muchii.emplace_back(poz1, poz2, nodStart, nodEnd, cost, font);
+	}
 }
 //DESENARE MUCHII + NODURI
 void Graf::Draw() const {
@@ -65,6 +89,31 @@ void Graf::DFS(int nod, const std::function<void()>& renderScene) {
 	sf::sleep(sf::milliseconds(500));
 
 }
+void Graf::BFS(int nod, const std::function<void()>& renderScene) {
+	std::queue<int> q;
+	q.push(nod);
+	vizitat[nod] = 1;
+	while (!q.empty()) {
+		int nodCurent = q.front();
+		q.pop();
+		noduri[nodCurent - 1].SetCuloareNod(CURENT);
+		renderScene();
+		sf::sleep(sf::milliseconds(500));
+		for (const auto& vecin : matrix[nodCurent]) {
+			if (vizitat[vecin.first] == 0) {
+				noduri[vecin.first - 1].SetCuloareNod(SELECTAT);
+				vizitat[vecin.first] = 1;
+				q.push(vecin.first);
+				renderScene();
+				sf::sleep(sf::milliseconds(500));
+			}
+		}
+		noduri[nodCurent - 1].SetCuloareNod(VIZITAT);
+		renderScene();
+		sf::sleep(sf::milliseconds(500));
+	}
+}
+
 //VERIFICA CLICK PE UN NOD
 int Graf::VerificaNod(float x, float y) const {
 	for (const auto& nod : noduri) {
@@ -188,5 +237,17 @@ Muchie::Muchie(sf::Vector2f poz1, sf::Vector2f poz2, int id1, int id2, int cost,
 		bounds.position.y + bounds.size.y / 2.0f
 		});
 	costText.setPosition({ poz1.x + dx / 2.0f, poz1.y + dy / 2.0f - 15.f});
+}
+// SETERI 
+void Muchie::SetCost(int c) {
+	cost = c;
+	costText.setString(std::to_string(cost));
+}
 
+// GETERI
+int Muchie::GetId1() const {
+	return idNod1;
+}
+int Muchie::GetId2() const {
+	return idNod2;
 }

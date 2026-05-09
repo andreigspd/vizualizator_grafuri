@@ -34,6 +34,9 @@ class Muchie : public sf::Drawable {
 	}
 public:
 	Muchie(sf::Vector2f poz1, sf::Vector2f poz2, int id1, int id2, int cost, const sf::Font& font);
+	void SetCost(int cost);
+	int GetId1() const;
+	int GetId2() const;
 };
 
 class Graf {
@@ -56,6 +59,7 @@ public:
 	void AdaugaNod(float x, float y);
 	void AdaugaMuchie(int idNod1, int idNod2, int cost);
 	void DFS(int startNod, const std::function<void()>& renderScene);
+	void BFS(int startNod, const std::function<void()>& renderScene);
 	void Draw() const;
 	bool VerificaClick(float x, float y) const;
 	int VerificaNod(float x, float y) const;

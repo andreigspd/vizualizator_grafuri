@@ -5,7 +5,10 @@ enum StareAplicatie {
 	NEUTRU_BUTON,
 	ADAUGA_NOD,
 	ADAUGA_MUCHIE,
-	START_DFS
+	ADAUGA_COST,
+	ASTEAPTA_COST,
+	START_DFS,
+	START_BFS
 };
 
 enum CuloareNod {
