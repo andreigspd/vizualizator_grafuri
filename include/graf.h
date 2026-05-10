@@ -1,48 +1,8 @@
 #pragma once
-#include "../include/header.h"
+#include "../include/nod.h"
+#include "../include/muchie.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
-
-
-class Nod : public sf::Drawable {
-	static constexpr double radius = 30.f;
-	sf::CircleShape cerc;
-	sf::Text text;
-	int id;
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const override {
-		target.draw(cerc, states);
-		target.draw(text, states);
-	}
-public:
-	Nod(float x, float y, int index, const sf::Font& font);
-	bool VerificaClick(float x, float y) const;
-	int GetNodId() const;
-	sf::Vector2f GetNodPosition() const;
-	void SetCuloareNod(CuloareNod color);
-};
-
-class Muchie : public sf::Drawable {
-	static constexpr float grosime = 4.0f;
-	static constexpr float pi = 3.141592f;
-	sf::RectangleShape linie;
-	sf::Text costText;
-	int idNod1, idNod2;
-	int cost;
-	bool esteOrientat;
-	sf::CircleShape sageata;
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const override {
-		target.draw(linie, states);
-		if (esteOrientat) {
-			target.draw(sageata);
-		}
-		if(cost != 1) target.draw(costText, states);
-	}
-public:
-	Muchie(sf::Vector2f poz1, sf::Vector2f poz2, int id1, int id2, int cost, const sf::Font& font, bool orientat);
-	void SetCost(int cost);
-	int GetId1() const;
-	int GetId2() const;
-};
 
 class Graf {
 protected:

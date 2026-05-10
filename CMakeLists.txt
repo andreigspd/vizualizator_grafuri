@@ -12,7 +12,7 @@ FetchContent_Declare(SFML
     SYSTEM)
 FetchContent_MakeAvailable(SFML)
 
-add_executable(main src/main.cpp "include/header.h"  "src/header.cpp" "include/graf.h" "src/graf.cpp" "include/util.h")
+add_executable(main src/main.cpp    "include/graf.h" "src/graf.cpp" "include/util.h" "include/aplicatie.h" "src/aplicatie.cpp" "include/nod.h" "include/muchie.h" "include/meniu.h" "include/manager_evenimente.h" "src/nod.cpp" "src/muchie.cpp" "src/manager_evenimente.cpp" "src/meniu.cpp" "include/buton.h" "src/buton.cpp")
 target_compile_features(main PRIVATE cxx_std_17)
 target_link_libraries(main PRIVATE SFML::Graphics)
 

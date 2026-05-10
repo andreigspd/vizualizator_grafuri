@@ -8,8 +8,11 @@ enum StareAplicatie {
 	ADAUGA_COST,
 	ASTEAPTA_COST,
 	START_DFS,
-	START_BFS
+	START_BFS,
+	ALEGE_ORIENTAT,
+	ALEGE_NEORIENTAT
 };
+
 
 enum CuloareNod {
 	NEVIZITAT,
