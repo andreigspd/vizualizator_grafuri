@@ -281,7 +281,7 @@ Muchie::Muchie(sf::Vector2f poz1, sf::Vector2f poz2, int id1, int id2, int cost,
 		bounds.position.x + bounds.size.x / 2.0f,
 		bounds.position.y + bounds.size.y / 2.0f
 		});
-	costText.setPosition({ poz1.x + dx / 2.0f, poz1.y + dy / 2.0f - 15.f});
+	costText.setPosition({ poz1.x + dx * 0.7f + (-dy / distanta) * 15.f, poz1.y + dy * 0.7f + (dx / distanta) * 15.f});
 }
 // SETERI 
 void Muchie::SetCost(int c) {
