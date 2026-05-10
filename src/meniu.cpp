@@ -45,9 +45,30 @@ MeniuStanga::MeniuStanga(const Layout& layout, const sf::Font& font) :
 }
 
 MeniuDreapta::MeniuDreapta(const Layout& layout, const sf::Font& font) :
-	Meniu(layout.screenWidth - layout.rightMenuWidth, 0, layout.rightMenuWidth, layout.screenHeight) {
+	Meniu(layout.screenWidth - layout.rightMenuWidth, 0, layout.rightMenuWidth, layout.screenHeight), tastaBack(font), tastaExit(font) {
 	AdaugaButon(font, "DFS", START_DFS, sf::Color::Red);
 	AdaugaButon(font, "BFS", START_BFS, sf::Color::Red);
+
+	tastaBack.setString("Press Z to go back");
+	tastaBack.setFillColor(sf::Color::Yellow);
+	tastaBack.setCharacterSize(20);
+	auto bounds = tastaBack.getLocalBounds();
+	tastaBack.setOrigin({
+		bounds.position.x + bounds.size.x / 2.0f,
+		bounds.position.y + bounds.size.y / 2.0f
+		});
+	tastaBack.setPosition({ fundal.getPosition().x + fundal.getSize().x / 2.0f, layout.screenHeight - 35.f});
+
+	tastaExit.setString("Press X to quit");
+	tastaExit.setFillColor(sf::Color::Red);
+	tastaExit.setCharacterSize(20);
+
+	bounds = tastaExit.getLocalBounds();
+	tastaExit.setOrigin({
+		bounds.position.x + bounds.size.x / 2.0f,
+		bounds.position.y + bounds.size.y / 2.0f
+		});
+	tastaExit.setPosition({ tastaBack.getPosition().x, layout.screenHeight - 15.f});
 }
 MeniuInitial::MeniuInitial(const Layout& layout, const sf::Font& font) :
 	Meniu(0, 0, layout.screenWidth, layout.screenHeight), titlu(font) {

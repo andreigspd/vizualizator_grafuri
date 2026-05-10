@@ -29,6 +29,13 @@ public:
 };
 
 class MeniuDreapta : public Meniu {
+	sf::Text tastaBack;
+	sf::Text tastaExit;
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override {
+		Meniu::draw(target, states);
+		target.draw(tastaBack, states);
+		target.draw(tastaExit, states);
+	}
 public:
 	MeniuDreapta(const Layout& layout, const sf::Font& font);
 };

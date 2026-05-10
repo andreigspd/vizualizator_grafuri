@@ -1,7 +1,7 @@
 #include "../include/aplicatie.h"
 
 Aplicatie::Aplicatie() :
-	window(sf::VideoMode::getDesktopMode(), "Grafuri"),
+	window(sf::VideoMode::getDesktopMode(), "Grafuri", sf::State::Fullscreen),
 	layout(static_cast<float>(sf::VideoMode::getDesktopMode().size.x),
 		static_cast<float>(sf::VideoMode::getDesktopMode().size.y),
 		250.f, 250.f),
@@ -19,6 +19,9 @@ void Aplicatie::ProceseazaElemente() {
 			if (keyboardInput->code == sf::Keyboard::Key::Z && G != nullptr) {
 				inputManager = nullptr;
 				G = nullptr;
+			}
+			else if (keyboardInput->code == sf::Keyboard::Key::X) {
+				window.close();
 			}
 		}
 		if (const auto* mouseClicked = event->getIf<sf::Event::MouseButtonPressed>()) {
