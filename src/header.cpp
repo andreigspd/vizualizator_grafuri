@@ -186,9 +186,11 @@ void ManagerEvenimente::ProceseazaClick(float x, float y) {
 					G.ColoreazaNod(nod, SELECTAT);
 				}
 				else {
-					G.SetNodEnd(nod);
-					G.ColoreazaNod(nod, SELECTAT);
-					G.SetStare(ASTEAPTA_COST);
+					if (nod != G.GetNodStart()) {
+						G.SetNodEnd(nod);
+						G.ColoreazaNod(nod, SELECTAT);
+						G.SetStare(ASTEAPTA_COST);
+					}
 				}
 			}
 		}

@@ -28,18 +28,24 @@ class Muchie : public sf::Drawable {
 	sf::Text costText;
 	int idNod1, idNod2;
 	int cost;
+	bool esteOrientat;
+	sf::CircleShape sageata;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override {
 		target.draw(linie, states);
+		if (esteOrientat) {
+			target.draw(sageata);
+		}
 		if(cost != 1) target.draw(costText, states);
 	}
 public:
-	Muchie(sf::Vector2f poz1, sf::Vector2f poz2, int id1, int id2, int cost, const sf::Font& font);
+	Muchie(sf::Vector2f poz1, sf::Vector2f poz2, int id1, int id2, int cost, const sf::Font& font, bool orientat);
 	void SetCost(int cost);
 	int GetId1() const;
 	int GetId2() const;
 };
 
 class Graf {
+protected:
 	StareAplicatie StareCurenta;
 	int nrNoduri, nrMuchii;
 	std::vector<Nod> noduri;
@@ -53,11 +59,11 @@ class Graf {
 	const sf::Font& font;
 	sf::FloatRect BlackScreen;
 
-
 public:
 	Graf(sf::RenderWindow& window, const sf::Font& font, const Layout& layout);
+	virtual ~Graf() = default;
 	void AdaugaNod(float x, float y);
-	void AdaugaMuchie(int idNod1, int idNod2, int cost);
+	virtual void AdaugaMuchie(int idNod1, int idNod2, int cost) = 0;
 	void DFS(int startNod, const std::function<void()>& renderScene);
 	void BFS(int startNod, const std::function<void()>& renderScene);
 	void Draw() const;
@@ -73,3 +79,14 @@ public:
 	void ResetVizitat();
 };
 
+class GrafNeorientat : public Graf {
+public:
+	GrafNeorientat(sf::RenderWindow& window, sf::Font& font, const Layout& layout);
+	void AdaugaMuchie(int idNod1, int idNod2, int cost) override;
+};
+
+class GrafOrientat : public Graf {
+public:
+	GrafOrientat(sf::RenderWindow& window, sf::Font& font, const Layout& layout);
+	void AdaugaMuchie(int idNod1, int idNod2, int cost) override;
+};

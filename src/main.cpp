@@ -14,11 +14,11 @@ int main()
 		250.f
 	);
 
-	Graf G(window, font, layout);
+	std::unique_ptr<Graf> G = std::make_unique<GrafOrientat>(window, font, layout);
 	MeniuStanga meniuStanga(layout, font);
 	MeniuDreapta meniuDreapta(layout, font);
 	
-	ManagerEvenimente inputManager(G, meniuStanga, meniuDreapta, window, font);
+	ManagerEvenimente inputManager(*G, meniuStanga, meniuDreapta, window, font);
 	while (window.isOpen()) {
 		while (const auto event = window.pollEvent()) {
 			if (event->is<sf::Event::Closed>()) window.close();
@@ -37,7 +37,7 @@ int main()
 		window.clear();
 		window.draw(meniuStanga);
 		window.draw(meniuDreapta);
-		G.Draw();
+		G->Draw();
 		inputManager.DrawInputBox();
 		window.display();
 	}

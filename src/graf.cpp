@@ -24,38 +24,11 @@ void Graf::AdaugaNod(float x, float y) {
 	noduri.emplace_back(x, y, nrNoduri + 1, font);
 	nrNoduri++;
 }
-//ADAUGA MUCHIE
+/*ADAUGA MUCHIE - abstract
 void Graf::AdaugaMuchie(int nodStart, int nodEnd, int cost) {
-	bool existaMuchie = false;
-	for (auto& i : matrix[nodStart]) {
-		if (i.first == nodEnd) {
-			i.second = cost;
-			existaMuchie = true;
-			break;
-		}
-	}
-	if (existaMuchie) {
-		for (auto& i : matrix[nodEnd]) {
-			if (i.first == nodStart) {
-				i.second = cost;
-			}
-		}
-		for (auto& muchie : muchii) {
-			if ((muchie.GetId1() == nodStart && muchie.GetId2() == nodEnd) ||
-				(muchie.GetId1() == nodEnd && muchie.GetId2() == nodStart)) {
-				muchie.SetCost(cost);
-				break;
-			}
-		}
-	}
-	else {
-		matrix[nodStart].push_back({ nodEnd, cost });
-		matrix[nodEnd].push_back({ nodStart, cost });
-		sf::Vector2f poz1 = noduri[nodStart - 1].GetNodPosition();
-		sf::Vector2f poz2 = noduri[nodEnd - 1].GetNodPosition();
-		muchii.emplace_back(poz1, poz2, nodStart, nodEnd, cost, font);
-	}
+	
 }
+*/
 //DESENARE MUCHII + NODURI
 void Graf::Draw() const {
 	for (const auto& muchie : muchii) {
@@ -157,6 +130,67 @@ StareAplicatie Graf::GetStare() const{
 }
 // -------------------------------
 
+// METODE CLASA GRAF NEORIENTAT -------------->
+
+GrafNeorientat::GrafNeorientat(sf::RenderWindow& window, sf::Font& font, const Layout& layout) : Graf(window, font, layout) {}
+void GrafNeorientat::AdaugaMuchie(int nodStart, int nodEnd, int cost) {
+	bool existaMuchie = false;
+	for (auto& i : matrix[nodStart]) {
+		if (i.first == nodEnd) {
+			i.second = cost;
+			existaMuchie = true;
+			break;
+		}
+	}
+	if (existaMuchie) {
+		for (auto& i : matrix[nodEnd]) {
+			if (i.first == nodStart) {
+				i.second = cost;
+			}
+		}
+		for (auto& muchie : muchii) {
+			if ((muchie.GetId1() == nodStart && muchie.GetId2() == nodEnd) ||
+				(muchie.GetId1() == nodEnd && muchie.GetId2() == nodStart)) {
+				muchie.SetCost(cost);
+				break;
+			}
+		}
+	}
+	else {
+		matrix[nodStart].push_back({ nodEnd, cost });
+		matrix[nodEnd].push_back({ nodStart, cost });
+		sf::Vector2f poz1 = noduri[nodStart - 1].GetNodPosition();
+		sf::Vector2f poz2 = noduri[nodEnd - 1].GetNodPosition();
+		muchii.emplace_back(poz1, poz2, nodStart, nodEnd, cost, font, false);
+	}
+}
+
+GrafOrientat::GrafOrientat(sf::RenderWindow& window, sf::Font& font, const Layout& layout) : Graf(window, font, layout) {}
+void GrafOrientat::AdaugaMuchie(int nodStart, int nodEnd, int cost) {
+	bool existaMuchie = false;
+	for (auto& i : matrix[nodStart]) {
+		if (i.first == nodEnd) {
+			i.second = cost;
+			existaMuchie = true;
+			break;
+		}
+	}
+	if (existaMuchie) {
+		for (auto& muchie : muchii) {
+			if ((muchie.GetId1() == nodStart && muchie.GetId2() == nodEnd)) {
+				muchie.SetCost(cost);
+				break;
+			}
+		}
+	}
+	else {
+		matrix[nodStart].push_back({ nodEnd, cost });
+		sf::Vector2f poz1 = noduri[nodStart - 1].GetNodPosition();
+		sf::Vector2f poz2 = noduri[nodEnd - 1].GetNodPosition();
+		muchii.emplace_back(poz1, poz2, nodStart, nodEnd, cost, font, true);
+	}
+}
+
 //METODE CLASA NOD ---------------------------->
 //CONSTRUCTOR
 Nod::Nod(float x, float y, int index, const sf::Font& font) : id(index), text(font) {
@@ -214,8 +248,8 @@ void Nod::SetCuloareNod(CuloareNod color) {
 
 // METODE CLASA MUCHIE ---------------->
 //CONSTRUCTOR
-Muchie::Muchie(sf::Vector2f poz1, sf::Vector2f poz2, int id1, int id2, int cost, const sf::Font& font) :
-	costText(font), idNod1(id1), idNod2(id2), cost(cost) {
+Muchie::Muchie(sf::Vector2f poz1, sf::Vector2f poz2, int id1, int id2, int cost, const sf::Font& font, bool orientat) :
+	costText(font), idNod1(id1), idNod2(id2), cost(cost), esteOrientat(orientat) {
 	float dx = poz2.x - poz1.x;
 	float dy = poz2.y - poz1.y;
 	float distanta = sqrt(dx * dx + dy * dy);
@@ -227,6 +261,17 @@ Muchie::Muchie(sf::Vector2f poz1, sf::Vector2f poz2, int id1, int id2, int cost,
 
 	float unghiRadiani = std::atan2(dy, dx);
 	linie.setRotation(sf::radians(unghiRadiani));
+	if (esteOrientat) {
+		float razaSageata = 12.f;
+		sageata.setRadius(razaSageata);
+		sageata.setPointCount(3);
+		sageata.setFillColor(sf::Color::Magenta);
+		sageata.setOrigin({ razaSageata, 0.f });
+		float margineNodEndX = poz2.x - 30.f * std::cos(unghiRadiani);
+		float margineNodEndY = poz2.y - 30.f * std::sin(unghiRadiani);
+		sageata.setPosition({ margineNodEndX, margineNodEndY });
+		sageata.setRotation(sf::radians(unghiRadiani + pi / 2));
+	}
 
 	costText.setString(std::to_string(cost));
 	costText.setCharacterSize(16);
