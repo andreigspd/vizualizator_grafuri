@@ -2,7 +2,7 @@
 #include "../include/util.h"
 //METODE CLASA NOD ---------------------------->
 //CONSTRUCTOR
-Nod::Nod(float x, float y, int index, const sf::Font& font) : id(index), text(font) {
+Nod::Nod(float x, float y, int index, const sf::Font& font) : id(index), text(font), distanta(font) {
 	cerc.setRadius(radius);
 	cerc.setOrigin({ radius, radius });
 	cerc.setPosition({ x, y });
@@ -13,6 +13,7 @@ Nod::Nod(float x, float y, int index, const sf::Font& font) : id(index), text(fo
 	text.setString(std::to_string(index));
 	text.setCharacterSize(15);
 	text.setFillColor(sf::Color::Black);
+
 	const auto bounds = text.getLocalBounds();
 	text.setOrigin({
 		bounds.position.x + bounds.size.x / 2.0f,
@@ -53,4 +54,26 @@ void Nod::SetCuloareNod(CuloareNod color) {
 		break;
 	}
 }
+void Nod::SetTextCost(int d) {
+	if (d == -1) {
+		distanta.setString("");
+		return;
+	}
+	if (d == INT_MAX) {
+		distanta.setString("inf");
+	}
+	else {
+		distanta.setString(std::to_string(d));
+	}
+	distanta.setFillColor(sf::Color::Green);
+	distanta.setCharacterSize(15);
+	const auto bounds = distanta.getLocalBounds();
+	distanta.setOrigin({
+		bounds.position.x + bounds.size.x / 2.0f,
+		bounds.position.y + bounds.size.y / 2.0f
+		});
+	const auto poz = cerc.getPosition();
+	distanta.setPosition({ poz.x, poz.y + radius + 10.f });
+}
+
 // -----------------------------------

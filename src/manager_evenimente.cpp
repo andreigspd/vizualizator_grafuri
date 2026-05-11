@@ -26,10 +26,9 @@ void ManagerEvenimente::ProceseazaClick(float x, float y) {
 	}
 	if (StareNoua != NEUTRU) {
 		if (G.GetNodStart() != -1) {
-			G.ColoreazaNod(G.GetNodStart(), NEVIZITAT);
 			G.SetNodStart(-1);
 		}
-		if (StareNoua == NEUTRU_BUTON) G.SetStare(NEUTRU);
+		if (StareNoua == NEUTRU_BUTON) G.SetStare(NEUTRU), G.ResetVizitat();
 		else G.SetStare(StareNoua);
 	}
 	else {
@@ -53,6 +52,7 @@ void ManagerEvenimente::ProceseazaClick(float x, float y) {
 		else if (G.GetStare() == START_DFS) {
 			int nod = G.VerificaNod(x, y);
 			if (nod != -1) {
+				G.ResetVizitat();
 				G.SetNodStart(nod);
 				G.DFS(nod, [&]() {
 					window.clear();
@@ -61,12 +61,12 @@ void ManagerEvenimente::ProceseazaClick(float x, float y) {
 					G.Draw();
 					window.display();
 					});
-				G.ResetVizitat();
 			}
 		}
 		else if (G.GetStare() == START_BFS) {
 			int nod = G.VerificaClick(x, y);
 			if (nod != -1) {
+				G.ResetVizitat();
 				G.SetNodStart(nod);
 				G.BFS(nod, [&] {
 					window.clear();
@@ -75,7 +75,6 @@ void ManagerEvenimente::ProceseazaClick(float x, float y) {
 					G.Draw();
 					window.display();
 					});
-				G.ResetVizitat();
 			}
 		}
 		else if (G.GetStare() == ADAUGA_COST) {
@@ -92,6 +91,20 @@ void ManagerEvenimente::ProceseazaClick(float x, float y) {
 						G.SetStare(ASTEAPTA_COST);
 					}
 				}
+			}
+		}
+		else if (G.GetStare() == DIJKSTRA) {
+			int nod = G.VerificaNod(x, y);
+			if (nod != -1) {
+				G.ResetVizitat();
+				G.SetNodStart(nod);
+				G.Dijkstra(nod, [&] {
+					window.clear();
+					window.draw(meniuStanga);
+					window.draw(meniuDreapta);
+					G.Draw();
+					window.display();
+					});			
 			}
 		}
 	}

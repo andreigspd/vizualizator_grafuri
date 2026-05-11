@@ -2,7 +2,15 @@
 #include "../include/nod.h"
 #include "../include/muchie.h"
 #include <SFML/Graphics.hpp>
+#include <queue>
 #include <SFML/System.hpp>
+struct compareCost {
+	bool operator()(std::pair<int, int> a, std::pair<int, int> b) {
+		if (a.second == b.second) return a.first < b.first;
+		return a.second > b.second;
+	}
+};
+
 
 class Graf {
 protected:
@@ -14,10 +22,13 @@ protected:
 	int nodStart, nodEnd;
 
 	std::vector<std::vector<std::pair<int, int>>> matrix;
+	std::priority_queue < std::pair<int, int>, std::vector<std::pair<int, int> >, compareCost> pq;
+	std::vector<int> distantaDijkstra;
 
 	sf::RenderWindow& window;
 	const sf::Font& font;
 	sf::FloatRect BlackScreen;
+	
 
 public:
 	Graf(sf::RenderWindow& window, const sf::Font& font, const Layout& layout);
@@ -26,6 +37,7 @@ public:
 	virtual void AdaugaMuchie(int idNod1, int idNod2, int cost) = 0;
 	void DFS(int startNod, const std::function<void()>& renderScene);
 	void BFS(int startNod, const std::function<void()>& renderScene);
+	void Dijkstra(int startNod, const std::function<void()>& renderScene);
 	void Draw() const;
 	bool VerificaClick(float x, float y) const;
 	int VerificaNod(float x, float y) const;

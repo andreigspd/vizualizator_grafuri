@@ -48,6 +48,7 @@ MeniuDreapta::MeniuDreapta(const Layout& layout, const sf::Font& font) :
 	Meniu(layout.screenWidth - layout.rightMenuWidth, 0, layout.rightMenuWidth, layout.screenHeight), tastaBack(font), tastaExit(font) {
 	AdaugaButon(font, "DFS", START_DFS, sf::Color::Red);
 	AdaugaButon(font, "BFS", START_BFS, sf::Color::Red);
+	AdaugaButon(font, "DIJKSTRA", DIJKSTRA, sf::Color::Red);
 
 	tastaBack.setString("Press Z to go back");
 	tastaBack.setFillColor(sf::Color::Yellow);
@@ -70,6 +71,8 @@ MeniuDreapta::MeniuDreapta(const Layout& layout, const sf::Font& font) :
 		});
 	tastaExit.setPosition({ tastaBack.getPosition().x, layout.screenHeight - 15.f});
 }
+
+
 MeniuInitial::MeniuInitial(const Layout& layout, const sf::Font& font) :
 	Meniu(0, 0, layout.screenWidth, layout.screenHeight), titlu(font) {
 	titlu.setString("Vizualizator de grafuri");

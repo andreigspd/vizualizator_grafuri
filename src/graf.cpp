@@ -88,6 +88,47 @@ void Graf::BFS(int nod, const std::function<void()>& renderScene) {
 	}
 }
 
+void Graf::Dijkstra(int startNod, const std::function<void()>& renderScene) {
+	distantaDijkstra.assign(nrNoduri + 1, INT_MAX);
+	for (int i = 0; i < nrNoduri; ++i) {
+		noduri[i].SetCuloareNod(NEVIZITAT);
+		noduri[i].SetTextCost(INT_MAX);
+	}
+	noduri[startNod - 1].SetTextCost(0);
+	distantaDijkstra[startNod] = 0;
+	noduri[startNod - 1].SetCuloareNod(SELECTAT);
+	renderScene();
+	sf::sleep(sf::milliseconds(500));
+	pq.push({ startNod, 0});
+	while (!pq.empty()) {
+		int nodCurent = pq.top().first;
+		int costCurent = pq.top().second;
+		noduri[nodCurent - 1].SetCuloareNod(CURENT);
+		renderScene();
+		sf::sleep(sf::milliseconds(500));
+		pq.pop();
+		if (costCurent > distantaDijkstra[nodCurent]) {
+			noduri[nodCurent - 1].SetCuloareNod(VIZITAT);
+			continue;
+		}
+		for (const auto& i : matrix[nodCurent]) {
+			int nodVecin = i.first;
+			int costVecin = i.second;
+			if (distantaDijkstra[nodCurent] + costVecin < distantaDijkstra[nodVecin]) {
+				noduri[nodVecin - 1].SetTextCost(distantaDijkstra[nodCurent] + costVecin);
+				distantaDijkstra[nodVecin] = distantaDijkstra[nodCurent] + costVecin;
+				pq.push({ nodVecin, distantaDijkstra[nodVecin] });
+				noduri[nodVecin - 1].SetCuloareNod(SELECTAT);
+				renderScene();
+				sf::sleep(sf::milliseconds(500));
+			}
+		}
+		noduri[nodCurent - 1].SetCuloareNod(VIZITAT);
+		renderScene();
+		sf::sleep(sf::milliseconds(500));
+	}
+}
+
 //VERIFICA CLICK PE UN NOD
 int Graf::VerificaNod(float x, float y) const {
 	for (const auto& nod : noduri) {
@@ -99,12 +140,13 @@ int Graf::VerificaNod(float x, float y) const {
 }
 //RESET FRECVENTA VIZITAT
 void Graf::ResetVizitat() {
-	for (const auto& i : vizitat) {
-		if (i.second == 1) {
-			noduri[i.first - 1].SetCuloareNod(NEVIZITAT);
-		}
+	for (auto& i : noduri) {
+		i.SetCuloareNod(NEVIZITAT);
+		i.SetTextCost(-1);
 	}
 	vizitat.clear();
+	pq = std::priority_queue < std::pair<int, int>, std::vector<std::pair<int, int> >, compareCost>();
+
 }
 
 //SETERI -------------------
