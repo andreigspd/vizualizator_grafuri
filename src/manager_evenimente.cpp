@@ -25,6 +25,7 @@ void ManagerEvenimente::ProceseazaClick(float x, float y) {
 		StareNoua = meniuDreapta.VerificaClick(x, y);
 	}
 	if (StareNoua != NEUTRU) {
+		G.SetMesajEroare("");
 		if (G.GetNodStart() != -1) {
 			G.SetNodStart(-1);
 		}

@@ -3,7 +3,7 @@
 #include <queue>
 // METODE CLASA GRAF -------------------->
 //CONSTRUCTOR
-Graf::Graf(sf::RenderWindow& window, const sf::Font& font, const Layout& layout) : window(window), font(font){
+Graf::Graf(sf::RenderWindow& window, const sf::Font& font, const Layout& layout) : window(window), font(font), mesajEroare(font){
 	nrNoduri = 0;
 	nrMuchii = 0;
 	nodStart = nodEnd = -1;
@@ -14,6 +14,12 @@ Graf::Graf(sf::RenderWindow& window, const sf::Font& font, const Layout& layout)
 	);
 	matrix.resize(1001);
 	vizitat.reserve(1001);
+	mesajEroare.setString("");
+	mesajEroare.setFillColor(sf::Color::Red);
+	mesajEroare.setPosition({
+		layout.GetCanvasX() + 10.f, layout.screenHeight - 50.f
+		});
+
 }
 //VERIFICA CLICK IN ZONA DESENARE
 bool Graf::VerificaClick(float x, float y) const {
@@ -21,7 +27,15 @@ bool Graf::VerificaClick(float x, float y) const {
 }
 //ADAUGA NOD GRAF
 void Graf::AdaugaNod(float x, float y) {
-	if (VerificaClick(x, y) == 0) return;
+	if (VerificaNod(x, y) != -1) {
+		mesajEroare.setString("Pozitie nod incorecta (Prea aproape de alt nod)");
+		return;
+	}
+	if (VerificaClick(x, y) == 0) {
+		mesajEroare.setString("Pozitie nod incorecta (Inafara zonei de desenare)");
+		return;
+	}
+	mesajEroare.setString("");
 	noduri.emplace_back(x, y, nrNoduri + 1, font);
 	nrNoduri++;
 }
@@ -38,6 +52,7 @@ void Graf::Draw() const {
 	for (const auto& nod : noduri) {
 		window.draw(nod);
 	}
+	window.draw(mesajEroare);
 }
 //COLORARE NOD PARCURGERI
 void Graf::ColoreazaNod(int id, CuloareNod color) {
@@ -158,6 +173,9 @@ void Graf::SetNodStart(int id) {
 }
 void Graf::SetNodEnd(int id) {
 	nodEnd = id;
+}
+void Graf::SetMesajEroare(std::string input) {
+	mesajEroare.setString(input);
 }
 // -------------------------
 // GETERI -----------------

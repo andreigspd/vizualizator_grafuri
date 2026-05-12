@@ -28,6 +28,7 @@ protected:
 	sf::RenderWindow& window;
 	const sf::Font& font;
 	sf::FloatRect BlackScreen;
+	sf::Text mesajEroare;
 	
 
 public:
@@ -44,6 +45,7 @@ public:
 	void SetStare(StareAplicatie stare);
 	void SetNodStart(int id);
 	void SetNodEnd(int id);
+	void SetMesajEroare(std::string);
 	int GetNodStart() const;
 	int GetNodEnd() const;
 	void ColoreazaNod(int id, CuloareNod color);
