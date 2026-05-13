@@ -204,6 +204,18 @@ void Graf::ResetVizitat() {
 }
 
 //SETERI -------------------
+void Graf::SetNodPosition(int idNod, float x, float y) {
+	noduri[idNod - 1].SetPosition(x, y);
+	for (auto& muchie : muchii) {
+		if (muchie.GetId1() == idNod || muchie.GetId2() == idNod) {
+			sf::Vector2f poz1 = noduri[muchie.GetId1() - 1].GetNodPosition();
+			sf::Vector2f poz2 = noduri[muchie.GetId2() - 1].GetNodPosition();
+			muchie.SetPosition(poz1, poz2);
+		}
+	}
+
+}
+
 void Graf::SetStare(StareAplicatie stare) {
 	StareCurenta = stare;
 }

@@ -24,4 +24,5 @@ public:
 	int GetId2() const;
 	void SetId1(int id);
 	void SetId2(int id);
+	void SetPosition(sf::Vector2f poz1, sf::Vector2f poz2);
 };

@@ -73,6 +73,13 @@ void ManagerEvenimente::ProceseazaClick(float x, float y) {
 				G.StergeNod(nod);
 			}
 		}
+		else if (G.GetStare() == MUTA_NOD) {
+			int nod = G.VerificaNod(x, y);
+			if (nod != -1) {
+				G.SetNodStart(nod);
+				G.ColoreazaNod(G.GetNodStart(), SELECTAT);
+			}
+		}
 		else if (G.GetStare() == START_DFS) {
 			int nod = G.VerificaNod(x, y);
 			if (nod != -1) {
@@ -159,7 +166,24 @@ void ManagerEvenimente::ProceseazaTastatura(int c) {
 		inputText.setString("Cost: " + inputCost);
 	}
 }
-
+//
+void ManagerEvenimente::ProceseazaMouseMoved(float x, float y) {
+	if (G.GetStare() == MUTA_NOD) {
+		if (G.GetNodStart() != -1) {
+			if (G.VerificaClick(x, y)) {
+				G.SetNodPosition(G.GetNodStart(), x, y);
+			}
+		}
+	}
+}
+void ManagerEvenimente::ProceseazaMouseReleased() {
+	if (G.GetStare() == MUTA_NOD) {
+		if (G.GetNodStart() != -1) {
+			G.ColoreazaNod(G.GetNodStart(), NEVIZITAT);
+			G.SetNodStart(-1);
+		}
+	}
+}
 //UPDADTE MENIURI
 void ManagerEvenimente::Update() {
 	StareAplicatie stareaAcum = G.GetStare();

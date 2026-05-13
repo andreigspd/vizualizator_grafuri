@@ -48,6 +48,7 @@ public:
 	void SetNodStart(int id);
 	void SetNodEnd(int id);
 	void SetMesajEroare(std::string);
+	void SetNodPosition(int idNod, float x, float y);
 	int GetNodStart() const;
 	int GetNodEnd() const;
 	void ColoreazaNod(int id, CuloareNod color);

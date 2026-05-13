@@ -44,6 +44,18 @@ void Aplicatie::ProceseazaElemente() {
 				}
 			}
 		}
+		if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>()) {
+			if (G != nullptr) {
+				float x = static_cast<float>(mouseMoved->position.x);
+				float y = static_cast<float>(mouseMoved->position.y);
+				inputManager->ProceseazaMouseMoved(x, y);
+			}
+		}
+		if (const auto* mouseReleased = event->getIf<sf::Event::MouseButtonReleased>()) {
+			if (mouseReleased->button == sf::Mouse::Button::Left) {
+				if (G != nullptr) inputManager->ProceseazaMouseReleased();
+			}
+		}
 		if (G != nullptr) {
 			if (const auto* textEntered = event->getIf<sf::Event::TextEntered>()) {
 				inputManager->ProceseazaTastatura(textEntered->unicode);

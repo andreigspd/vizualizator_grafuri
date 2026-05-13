@@ -54,6 +54,10 @@ void Nod::SetCuloareNod(CuloareNod color) {
 		break;
 	}
 }
+void Nod::SetPosition(float x, float y) {
+	cerc.setPosition({ x, y });
+	text.setPosition({ x, y });
+}
 void Nod::SetNodId(int id) {
 	this->id = id;
 }

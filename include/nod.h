@@ -21,5 +21,6 @@ public:
 	void SetCuloareNod(CuloareNod color);
 	void SetTextCost(int cost);
 	void SetNodId(int id);
+	void SetPosition(float x, float y);
 	void SetNodTextId(std::string input);
 };
