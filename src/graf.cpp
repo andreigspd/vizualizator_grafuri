@@ -146,7 +146,7 @@ void Graf::Dijkstra(int startNod, const std::function<void()>& renderScene) {
 	distantaDijkstra.assign(nrNoduri + 1, 100001);
 	for (int i = 0; i < nrNoduri; ++i) {
 		noduri[i].SetCuloareNod(NEVIZITAT);
-		noduri[i].SetTextCost(INT_MAX);
+		noduri[i].SetTextCost(100001);
 	}
 	noduri[startNod - 1].SetTextCost(0);
 	distantaDijkstra[startNod] = 0;
@@ -205,6 +205,7 @@ void Graf::ResetVizitat() {
 
 //SETERI -------------------
 void Graf::SetNodPosition(int idNod, float x, float y) {
+	x = std::clamp(x, BlackScreen.position.x, BlackScreen.size.x + BlackScreen.position.x);
 	noduri[idNod - 1].SetPosition(x, y);
 	for (auto& muchie : muchii) {
 		if (muchie.GetId1() == idNod || muchie.GetId2() == idNod) {

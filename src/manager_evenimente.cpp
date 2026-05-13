@@ -170,9 +170,7 @@ void ManagerEvenimente::ProceseazaTastatura(int c) {
 void ManagerEvenimente::ProceseazaMouseMoved(float x, float y) {
 	if (G.GetStare() == MUTA_NOD) {
 		if (G.GetNodStart() != -1) {
-			if (G.VerificaClick(x, y)) {
 				G.SetNodPosition(G.GetNodStart(), x, y);
-			}
 		}
 	}
 }
