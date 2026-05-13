@@ -42,6 +42,13 @@ void Muchie::SetCost(int c) {
 	cost = c;
 	costText.setString(std::to_string(cost));
 }
+void Muchie::SetId1(int id) {
+	idNod1 = id;
+}
+void Muchie::SetId2(int id) {
+	idNod2 = id;
+}
+
 
 // GETERI
 int Muchie::GetId1() const {

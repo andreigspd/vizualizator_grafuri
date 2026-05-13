@@ -39,6 +39,45 @@ void Graf::AdaugaNod(float x, float y) {
 	noduri.emplace_back(x, y, nrNoduri + 1, font);
 	nrNoduri++;
 }
+void Graf::StergeNod(int id) {
+	for (int i = muchii.size() - 1; i >= 0; i--) {
+		if (muchii[i].GetId1() == id || muchii[i].GetId2() == id) {
+			muchii.erase(muchii.begin() + i);
+		}
+		else {
+			if (muchii[i].GetId1() > id) {
+				muchii[i].SetId1(muchii[i].GetId1() - 1);
+			}
+			if (muchii[i].GetId2() > id) {
+				muchii[i].SetId2(muchii[i].GetId2() - 1);
+			}
+		}
+	}
+	nrMuchii = muchii.size();
+
+	for (int i = 0; i < matrix.size(); i++) {
+		for (int j = matrix[i].size() - 1; j >= 0; j--) {
+			if (matrix[i][j].first == id) {
+				matrix[i].erase(matrix[i].begin() + j);
+			}
+			else if (matrix[i][j].first > id) {
+				matrix[i][j].first--;
+			}
+		}
+	}
+	matrix.erase(matrix.begin() + id - 1);
+	for (int i = noduri.size() - 1; i >= 0; i--) {
+		if (noduri[i].GetNodId() == id) {
+			noduri.erase(noduri.begin() + i);
+		}
+		else if (noduri[i].GetNodId() > id) {
+			noduri[i].SetNodId(noduri[i].GetNodId() - 1);
+			noduri[i].SetNodTextId(std::to_string(noduri[i].GetNodId()));
+		}
+	}
+	nrNoduri = noduri.size();
+}
+
 /*ADAUGA MUCHIE - abstract
 void Graf::AdaugaMuchie(int nodStart, int nodEnd, int cost) {
 	

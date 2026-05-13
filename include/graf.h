@@ -35,6 +35,7 @@ public:
 	Graf(sf::RenderWindow& window, const sf::Font& font, const Layout& layout);
 	virtual ~Graf() = default;
 	void AdaugaNod(float x, float y);
+	void StergeNod(int id);
 	virtual void AdaugaMuchie(int idNod1, int idNod2, int cost) = 0;
 	void DFS(int startNod, const std::function<void()>& renderScene);
 	void BFS(int startNod, const std::function<void()>& renderScene);

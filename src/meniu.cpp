@@ -42,6 +42,7 @@ MeniuStanga::MeniuStanga(const Layout& layout, const sf::Font& font) :
 	AdaugaButon(font, "Adauga Nod", ADAUGA_NOD, sf::Color::Red);
 	AdaugaButon(font, "Adauga Muchie", ADAUGA_MUCHIE, sf::Color::Red);
 	AdaugaButon(font, "Adauga Cost", ADAUGA_COST, sf::Color::Red);
+	AdaugaButon(font, "Sterge Nod", STERGE_NOD, sf::Color::Red);
 }
 
 MeniuDreapta::MeniuDreapta(const Layout& layout, const sf::Font& font) :

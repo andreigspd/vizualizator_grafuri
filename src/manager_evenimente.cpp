@@ -29,7 +29,8 @@ void ManagerEvenimente::ProceseazaClick(float x, float y) {
 		if (G.GetNodStart() != -1) {
 			G.SetNodStart(-1);
 		}
-		if (StareNoua == NEUTRU_BUTON) G.SetStare(NEUTRU), G.ResetVizitat();
+		G.ResetVizitat();
+		if (StareNoua == NEUTRU_BUTON) G.SetStare(NEUTRU);
 		else G.SetStare(StareNoua);
 	}
 	else {
@@ -50,6 +51,12 @@ void ManagerEvenimente::ProceseazaClick(float x, float y) {
 				}
 			}
 		}
+		else if (G.GetStare() == STERGE_NOD) {
+			int nod = G.VerificaNod(x, y);
+			if (nod != -1) {
+				G.StergeNod(nod);
+			}
+		}
 		else if (G.GetStare() == START_DFS) {
 			int nod = G.VerificaNod(x, y);
 			if (nod != -1) {
@@ -65,7 +72,7 @@ void ManagerEvenimente::ProceseazaClick(float x, float y) {
 			}
 		}
 		else if (G.GetStare() == START_BFS) {
-			int nod = G.VerificaClick(x, y);
+			int nod = G.VerificaNod(x, y);
 			if (nod != -1) {
 				G.ResetVizitat();
 				G.SetNodStart(nod);

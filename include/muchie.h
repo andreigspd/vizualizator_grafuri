@@ -22,4 +22,6 @@ public:
 	void SetCost(int cost);
 	int GetId1() const;
 	int GetId2() const;
+	void SetId1(int id);
+	void SetId2(int id);
 };

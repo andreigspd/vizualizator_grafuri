@@ -20,4 +20,6 @@ public:
 	sf::Vector2f GetNodPosition() const;
 	void SetCuloareNod(CuloareNod color);
 	void SetTextCost(int cost);
+	void SetNodId(int id);
+	void SetNodTextId(std::string input);
 };

@@ -54,6 +54,13 @@ void Nod::SetCuloareNod(CuloareNod color) {
 		break;
 	}
 }
+void Nod::SetNodId(int id) {
+	this->id = id;
+}
+void Nod::SetNodTextId(std::string input) {
+	text.setString(input);
+}
+
 void Nod::SetTextCost(int d) {
 	if (d == -1) {
 		distanta.setString("");
