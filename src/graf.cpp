@@ -143,7 +143,7 @@ void Graf::BFS(int nod, const std::function<void()>& renderScene) {
 }
 
 void Graf::Dijkstra(int startNod, const std::function<void()>& renderScene) {
-	distantaDijkstra.assign(nrNoduri + 1, INT_MAX);
+	distantaDijkstra.assign(nrNoduri + 1, 100001);
 	for (int i = 0; i < nrNoduri; ++i) {
 		noduri[i].SetCuloareNod(NEVIZITAT);
 		noduri[i].SetTextCost(INT_MAX);
@@ -264,6 +264,28 @@ void GrafNeorientat::AdaugaMuchie(int nodStart, int nodEnd, int cost) {
 		muchii.emplace_back(poz1, poz2, nodStart, nodEnd, cost, font, false);
 	}
 }
+void GrafNeorientat::StergeMuchie(int idNod1, int idNod2) {
+	for(int i = matrix[idNod1].size() - 1; i >= 0; i--){
+		if (matrix[idNod1][i].first == idNod2) {
+			matrix[idNod1].erase(matrix[idNod1].begin() + i);
+		}
+	}
+	for (int i = matrix[idNod2].size() - 1; i >= 0; i--) {
+		if (matrix[idNod2][i].first == idNod1) {
+			matrix[idNod2].erase(matrix[idNod2].begin() + i);
+		}
+	}
+	for (int i = muchii.size() - 1; i >= 0; i--) {
+		if (muchii[i].GetId1() == idNod1 && muchii[i].GetId2() == idNod2) {
+			muchii.erase(muchii.begin() + i);
+		}
+		if (muchii[i].GetId1() == idNod2 && muchii[i].GetId2() == idNod1) {
+			muchii.erase(muchii.begin() + i);
+		}
+	}
+	nrMuchii = muchii.size();
+}
+
 
 GrafOrientat::GrafOrientat(sf::RenderWindow& window, sf::Font& font, const Layout& layout) : Graf(window, font, layout) {}
 void GrafOrientat::AdaugaMuchie(int nodStart, int nodEnd, int cost) {
@@ -291,4 +313,16 @@ void GrafOrientat::AdaugaMuchie(int nodStart, int nodEnd, int cost) {
 	}
 }
 
-
+void GrafOrientat::StergeMuchie(int idNod1, int idNod2) {
+	for (int i = matrix[idNod1].size() - 1; i >= 0; i--) {
+		if (matrix[idNod1][i].first == idNod2) {
+			matrix[idNod1].erase(matrix[idNod1].begin() + i);
+		}
+	}
+	for (int i = muchii.size() - 1; i >= 0; i--) {
+		if (muchii[i].GetId1() == idNod1 && muchii[i].GetId2() == idNod2) {
+			muchii.erase(muchii.begin() + i);
+		}
+	}
+	nrMuchii = muchii.size();
+}

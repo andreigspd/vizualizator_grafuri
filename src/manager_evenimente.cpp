@@ -51,6 +51,22 @@ void ManagerEvenimente::ProceseazaClick(float x, float y) {
 				}
 			}
 		}
+		else if (G.GetStare() == STERGE_MUCHIE) {
+			int nod = G.VerificaNod(x, y);
+			if (nod != -1) {
+				if (G.GetNodStart() == -1) {
+					G.SetNodStart(nod);
+					G.ColoreazaNod(nod, SELECTAT);
+				}
+				else if (nod != G.GetNodStart()) {
+					G.SetNodEnd(nod);
+					G.StergeMuchie(G.GetNodStart(), G.GetNodEnd());
+					G.ColoreazaNod(G.GetNodStart(), NEVIZITAT);
+					G.SetNodStart(-1);
+					G.SetNodEnd(-1);
+				}
+			}
+		}
 		else if (G.GetStare() == STERGE_NOD) {
 			int nod = G.VerificaNod(x, y);
 			if (nod != -1) {

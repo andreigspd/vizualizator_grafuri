@@ -37,6 +37,7 @@ public:
 	void AdaugaNod(float x, float y);
 	void StergeNod(int id);
 	virtual void AdaugaMuchie(int idNod1, int idNod2, int cost) = 0;
+	virtual void StergeMuchie(int idNod1, int idNod2) = 0;
 	void DFS(int startNod, const std::function<void()>& renderScene);
 	void BFS(int startNod, const std::function<void()>& renderScene);
 	void Dijkstra(int startNod, const std::function<void()>& renderScene);
@@ -58,10 +59,12 @@ class GrafNeorientat : public Graf {
 public:
 	GrafNeorientat(sf::RenderWindow& window, sf::Font& font, const Layout& layout);
 	void AdaugaMuchie(int idNod1, int idNod2, int cost) override;
+	void StergeMuchie(int idNod1, int idNod2) override;
 };
 
 class GrafOrientat : public Graf {
 public:
 	GrafOrientat(sf::RenderWindow& window, sf::Font& font, const Layout& layout);
 	void AdaugaMuchie(int idNod1, int idNod2, int cost) override;
+	void StergeMuchie(int idNod1, int idNod2) override;
 };
