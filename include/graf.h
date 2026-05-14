@@ -43,6 +43,7 @@ public:
 	void DFS(int startNod, const std::function<void()>& renderScene);
 	void BFS(int startNod, const std::function<void()>& renderScene);
 	void Dijkstra(int startNod, const std::function<void()>& renderScene);
+	void AStar(int startNod, int destNod, const std::function<void()>& renderScene);
 	void Draw() const;
 	bool VerificaClick(float x, float y) const;
 	int VerificaNod(float x, float y) const;
@@ -58,6 +59,8 @@ public:
 	void ColoreazaNod(int id, CuloareNod color);
 	StareAplicatie GetStare() const;
 	void ResetVizitat();
+	void ResetCuloareMuchii();
+	float CalculeazaAStar(int nodCurent, int nodDestinatie);
 };
 
 class GrafNeorientat : public Graf {

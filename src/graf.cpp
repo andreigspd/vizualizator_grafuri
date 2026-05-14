@@ -190,6 +190,68 @@ void Graf::Dijkstra(int startNod, const std::function<void()>& renderScene) {
 		sf::sleep(sf::milliseconds(500));
 	}
 }
+float Graf::CalculeazaAStar(int nodStart, int nodDestinatie) {
+	sf::Vector2f poz1 = noduri[nodStart - 1].GetNodPosition();
+	sf::Vector2f poz2 = noduri[nodDestinatie - 1].GetNodPosition();
+	float dx = poz1.x - poz2.x;
+	float dy = poz1.y - poz2.y;
+
+	return std::sqrt(dx * dx + dy * dy);
+}
+
+void Graf::AStar(int startNod, int destNod, const std::function<void()>& renderScene) {
+	distantaDijkstra.assign(nrNoduri + 1, 10000001);
+	parintiDijkstra.assign(nrNoduri + 1, -1);
+	for (int i = 0; i < nrNoduri; ++i) {
+		noduri[i].SetCuloareNod(NEVIZITAT);
+		noduri[i].SetTextCost(100001);
+	}
+	noduri[startNod - 1].SetTextCost(0);
+	distantaDijkstra[startNod] = 0;
+	noduri[startNod - 1].SetCuloareNod(SELECTAT);
+	renderScene();
+	sf::sleep(sf::milliseconds(500));
+	float fStart = CalculeazaAStar(startNod, destNod);
+
+	pq.push({ startNod, fStart });
+	while (!pq.empty()) {
+		int nodCurent = pq.top().first;
+		int costCurent = pq.top().second;
+		noduri[nodCurent - 1].SetCuloareNod(CURENT);
+		if (nodCurent == destNod) {
+			noduri[nodCurent - 1].SetCuloareNod(VIZITAT);
+			renderScene();
+			break;
+		}
+		renderScene();
+		sf::sleep(sf::milliseconds(500));
+		pq.pop();
+		for (const auto& i : matrix[nodCurent]) {
+			int nodVecin = i.first;
+			int costVecin = i.second;
+			if (distantaDijkstra[nodCurent] + costVecin < distantaDijkstra[nodVecin]) {
+				if (parintiDijkstra[nodVecin] != -1) {
+					GetMuchie(parintiDijkstra[nodVecin], nodVecin).SetCuloareMuchie(sf::Color::Magenta);
+				}
+				GetMuchie(nodCurent, nodVecin).SetCuloareMuchie(sf::Color::Blue);
+				renderScene();
+				sf::sleep(sf::milliseconds(500));
+				noduri[nodVecin - 1].SetTextCost(distantaDijkstra[nodCurent] + costVecin);
+				distantaDijkstra[nodVecin] = distantaDijkstra[nodCurent] + costVecin;
+				parintiDijkstra[nodVecin] = nodCurent;
+				float fVecin = distantaDijkstra[nodVecin] + CalculeazaAStar(nodVecin, destNod);
+				pq.push({ nodVecin, fVecin });
+				noduri[nodVecin - 1].SetCuloareNod(SELECTAT);
+				renderScene();
+				sf::sleep(sf::milliseconds(500));
+			}
+		}
+		noduri[nodCurent - 1].SetCuloareNod(VIZITAT);
+		renderScene();
+		sf::sleep(sf::milliseconds(500));
+	}
+}
+
 
 //VERIFICA CLICK PE UN NOD
 int Graf::VerificaNod(float x, float y) const {
@@ -209,6 +271,11 @@ void Graf::ResetVizitat() {
 	vizitat.clear();
 	pq = std::priority_queue < std::pair<int, int>, std::vector<std::pair<int, int> >, compareCost>();
 
+}
+void Graf::ResetCuloareMuchii() {
+	for (auto& muchie : muchii) {
+		muchie.SetCuloareMuchie(sf::Color::Magenta);
+	}
 }
 
 //SETERI -------------------

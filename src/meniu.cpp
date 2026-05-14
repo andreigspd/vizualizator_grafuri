@@ -52,6 +52,7 @@ MeniuDreapta::MeniuDreapta(const Layout& layout, const sf::Font& font) :
 	AdaugaButon(font, "DFS", START_DFS, sf::Color::Red);
 	AdaugaButon(font, "BFS", START_BFS, sf::Color::Red);
 	AdaugaButon(font, "DIJKSTRA", DIJKSTRA, sf::Color::Red);
+	AdaugaButon(font, "A STAR", A_STAR, sf::Color::Red);
 
 	tastaBack.setString("Press Z to go back");
 	tastaBack.setFillColor(sf::Color::Yellow);

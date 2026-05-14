@@ -30,6 +30,7 @@ void ManagerEvenimente::ProceseazaClick(float x, float y) {
 			G.SetNodStart(-1);
 		}
 		G.ResetVizitat();
+		G.ResetCuloareMuchii();
 		if (StareNoua == NEUTRU_BUTON) G.SetStare(NEUTRU);
 		else G.SetStare(StareNoua);
 	}
@@ -138,6 +139,27 @@ void ManagerEvenimente::ProceseazaClick(float x, float y) {
 					});			
 			}
 		}
+		else if (G.GetStare() == A_STAR) {
+			int nod = G.VerificaNod(x, y);
+			if (nod != -1) {
+				if (G.GetNodStart() == -1) {
+					G.SetNodStart(nod);
+					G.ColoreazaNod(nod, SELECTAT);
+				}
+				else {
+					G.ResetVizitat();
+					G.AStar(G.GetNodStart(), nod, [&] {
+						window.clear();
+						window.draw(meniuStanga);
+						window.draw(meniuDreapta);
+						G.Draw();
+						window.display();
+						});
+					G.SetNodStart(-1);
+				}
+			}
+			
+		}
 	}
 }
 // PROCESEAZA INPUT
@@ -173,9 +195,7 @@ void ManagerEvenimente::ProceseazaMouseMoved(float x, float y) {
 				G.SetNodPosition(G.GetNodStart(), x, y);
 		}
 	}
-	if (G.GetStare() == NEUTRU || G.GetStare() == ADAUGA_MUCHIE || G.GetStare() == MUTA_NOD) {
-		G.SetHover(x, y);
-	}
+	G.SetHover(x, y);
 }
 void ManagerEvenimente::ProceseazaMouseReleased() {
 	if (G.GetStare() == MUTA_NOD) {
