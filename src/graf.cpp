@@ -143,7 +143,8 @@ void Graf::BFS(int nod, const std::function<void()>& renderScene) {
 }
 
 void Graf::Dijkstra(int startNod, const std::function<void()>& renderScene) {
-	distantaDijkstra.assign(nrNoduri + 1, 100001);
+	distantaDijkstra.assign(nrNoduri + 1, 10000001);
+	parintiDijkstra.assign(nrNoduri + 1, -1);
 	for (int i = 0; i < nrNoduri; ++i) {
 		noduri[i].SetCuloareNod(NEVIZITAT);
 		noduri[i].SetTextCost(100001);
@@ -169,8 +170,15 @@ void Graf::Dijkstra(int startNod, const std::function<void()>& renderScene) {
 			int nodVecin = i.first;
 			int costVecin = i.second;
 			if (distantaDijkstra[nodCurent] + costVecin < distantaDijkstra[nodVecin]) {
+				if (parintiDijkstra[nodVecin] != -1) {
+					GetMuchie(parintiDijkstra[nodVecin], nodVecin).SetCuloareMuchie(sf::Color::Magenta);
+				}
+				GetMuchie(nodCurent, nodVecin).SetCuloareMuchie(sf::Color::Blue);
+				renderScene();
+				sf::sleep(sf::milliseconds(500));
 				noduri[nodVecin - 1].SetTextCost(distantaDijkstra[nodCurent] + costVecin);
 				distantaDijkstra[nodVecin] = distantaDijkstra[nodCurent] + costVecin;
+				parintiDijkstra[nodVecin] = nodCurent;
 				pq.push({ nodVecin, distantaDijkstra[nodVecin] });
 				noduri[nodVecin - 1].SetCuloareNod(SELECTAT);
 				renderScene();
@@ -277,6 +285,13 @@ void GrafNeorientat::AdaugaMuchie(int nodStart, int nodEnd, int cost) {
 		muchii.emplace_back(poz1, poz2, nodStart, nodEnd, cost, font, false);
 	}
 }
+Muchie& GrafNeorientat::GetMuchie(int idNod1, int idNod2) {
+	for (auto& muchie : muchii) {
+		if (muchie.GetId1() == idNod1 && muchie.GetId2() == idNod2) return muchie;
+		if (muchie.GetId1() == idNod2 && muchie.GetId2() == idNod1) return muchie;
+	}
+}
+
 void GrafNeorientat::StergeMuchie(int idNod1, int idNod2) {
 	for(int i = matrix[idNod1].size() - 1; i >= 0; i--){
 		if (matrix[idNod1][i].first == idNod2) {
@@ -323,6 +338,11 @@ void GrafOrientat::AdaugaMuchie(int nodStart, int nodEnd, int cost) {
 		sf::Vector2f poz1 = noduri[nodStart - 1].GetNodPosition();
 		sf::Vector2f poz2 = noduri[nodEnd - 1].GetNodPosition();
 		muchii.emplace_back(poz1, poz2, nodStart, nodEnd, cost, font, true);
+	}
+}
+Muchie& GrafOrientat::GetMuchie(int idNod1, int idNod2) {
+	for (auto& muchie : muchii) {
+		if (muchie.GetId1() == idNod1 && muchie.GetId2() == idNod2) return muchie;
 	}
 }
 

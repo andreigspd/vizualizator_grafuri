@@ -57,6 +57,10 @@ void Muchie::SetPosition(sf::Vector2f poz1, sf::Vector2f poz2) {
 	}
 	costText.setPosition({ poz1.x + dx * 0.7f + (-dy / distanta) * 15.f, poz1.y + dy * 0.7f + (dx / distanta) * 15.f });
 }
+void Muchie::SetCuloareMuchie(sf::Color color) {
+	linie.setFillColor(color);
+	sageata.setFillColor(color);
+}
 
 
 // GETERI

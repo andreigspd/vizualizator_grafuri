@@ -22,6 +22,8 @@ public:
 	void SetCost(int cost);
 	int GetId1() const;
 	int GetId2() const;
+	Muchie& GetMuchie(int idNod1, int idNod2);
+	void SetCuloareMuchie(sf::Color color);
 	void SetId1(int id);
 	void SetId2(int id);
 	void SetPosition(sf::Vector2f poz1, sf::Vector2f poz2);

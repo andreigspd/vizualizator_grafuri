@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <queue>
 #include <SFML/System.hpp>
+#include <algorithm>
 struct compareCost {
 	bool operator()(std::pair<int, int> a, std::pair<int, int> b) {
 		if (a.second == b.second) return a.first < b.first;
@@ -24,6 +25,7 @@ protected:
 	std::vector<std::vector<std::pair<int, int>>> matrix;
 	std::priority_queue < std::pair<int, int>, std::vector<std::pair<int, int> >, compareCost> pq;
 	std::vector<int> distantaDijkstra;
+	std::vector<int> parintiDijkstra;
 
 	sf::RenderWindow& window;
 	const sf::Font& font;
@@ -49,6 +51,7 @@ public:
 	void SetNodEnd(int id);
 	void SetMesajEroare(std::string);
 	void SetNodPosition(int idNod, float x, float y);
+	virtual Muchie& GetMuchie(int idNod1, int idNod2) = 0;
 	int GetNodStart() const;
 	int GetNodEnd() const;
 	void ColoreazaNod(int id, CuloareNod color);
@@ -60,6 +63,7 @@ class GrafNeorientat : public Graf {
 public:
 	GrafNeorientat(sf::RenderWindow& window, sf::Font& font, const Layout& layout);
 	void AdaugaMuchie(int idNod1, int idNod2, int cost) override;
+	Muchie& GetMuchie(int idNod1, int idNod2) override;
 	void StergeMuchie(int idNod1, int idNod2) override;
 };
 
@@ -67,5 +71,6 @@ class GrafOrientat : public Graf {
 public:
 	GrafOrientat(sf::RenderWindow& window, sf::Font& font, const Layout& layout);
 	void AdaugaMuchie(int idNod1, int idNod2, int cost) override;
+	Muchie& GetMuchie(int idNod1, int idNod2) override;
 	void StergeMuchie(int idNod1, int idNod2) override;
 };
