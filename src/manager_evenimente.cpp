@@ -173,6 +173,9 @@ void ManagerEvenimente::ProceseazaMouseMoved(float x, float y) {
 				G.SetNodPosition(G.GetNodStart(), x, y);
 		}
 	}
+	if (G.GetStare() == NEUTRU || G.GetStare() == ADAUGA_MUCHIE || G.GetStare() == MUTA_NOD) {
+		G.SetHover(x, y);
+	}
 }
 void ManagerEvenimente::ProceseazaMouseReleased() {
 	if (G.GetStare() == MUTA_NOD) {

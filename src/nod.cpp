@@ -87,4 +87,14 @@ void Nod::SetTextCost(int d) {
 	distanta.setPosition({ poz.x, poz.y + radius + 10.f });
 }
 
+void Nod::SetHover(bool hover) {
+	if (hover) {
+		cerc.setOutlineColor(sf::Color::White);
+		cerc.setOutlineThickness(3);
+	}
+	else {
+		cerc.setOutlineThickness(0);
+	}
+}
+
 // -----------------------------------

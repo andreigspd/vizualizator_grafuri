@@ -23,4 +23,5 @@ public:
 	void SetNodId(int id);
 	void SetPosition(float x, float y);
 	void SetNodTextId(std::string input);
+	void SetHover(bool hover);
 };

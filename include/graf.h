@@ -51,6 +51,7 @@ public:
 	void SetNodEnd(int id);
 	void SetMesajEroare(std::string);
 	void SetNodPosition(int idNod, float x, float y);
+	void SetHover(float x, float y);
 	virtual Muchie& GetMuchie(int idNod1, int idNod2) = 0;
 	int GetNodStart() const;
 	int GetNodEnd() const;

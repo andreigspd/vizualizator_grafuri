@@ -237,6 +237,17 @@ void Graf::SetNodEnd(int id) {
 void Graf::SetMesajEroare(std::string input) {
 	mesajEroare.setString(input);
 }
+void Graf::SetHover(float x, float y) {
+	int nod = VerificaNod(x, y);
+	for (int i = 0; i < nrNoduri; i++) {
+		if (noduri[i].GetNodId() == nod) {
+			noduri[i].SetHover(true);
+		}
+		else {
+			noduri[i].SetHover(false);
+		}
+	}
+}
 // -------------------------
 // GETERI -----------------
 int Graf::GetNodEnd() const {
