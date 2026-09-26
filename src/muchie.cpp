@@ -1,4 +1,5 @@
 #include "../include/muchie.h"
+#include <cmath>
 
 // METODE CLASA MUCHIE ---------------->
 //CONSTRUCTOR

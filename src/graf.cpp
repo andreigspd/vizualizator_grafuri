@@ -1,6 +1,7 @@
 #include "../include/graf.h"
 #include "../include/util.h"
 #include <queue>
+#include <cmath>
 // METODE CLASA GRAF -------------------->
 //CONSTRUCTOR
 Graf::Graf(sf::RenderWindow& window, const sf::Font& font, const Layout& layout) : window(window), font(font), mesajEroare(font){

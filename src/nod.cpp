@@ -1,5 +1,6 @@
 #include "../include/nod.h"
 #include "../include/util.h"
+#include <climits>
 //METODE CLASA NOD ---------------------------->
 //CONSTRUCTOR
 Nod::Nod(float x, float y, int index, const sf::Font& font) : id(index), text(font), distanta(font) {
