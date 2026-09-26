@@ -135,8 +135,12 @@ The visualizer supports full graph editing and pathfinding executions.
     cd vizualizator_grafuri
     ```
 
-2.  **Ensure Font File**: 
-    An `ARIAL.TTF` font file is required by the engine. Ensure this file is placed in the project directory or compiled output folder where the binary runs.
+2.  **Add a Font File**:
+    The engine loads `assets/DejaVuSans.ttf` at runtime. Download a free/open font
+    (e.g. [DejaVu Sans](https://dejavu-fonts.github.io/)) and place it in the
+    `assets/` folder with that exact name. CMake automatically copies the `assets/`
+    folder next to the compiled binary, so the path resolves when you run it.
+    See [`assets/README.md`](assets/README.md) for details.
 
 3.  **Generate Build Files & Compile**:
     Using CMake CLI:
@@ -160,7 +164,7 @@ The visualizer supports full graph editing and pathfinding executions.
 ```
 vizualizator_grafuri/
 ├── CMakeLists.txt            # Declares project dependencies & builds using FetchContent
-├── ARIAL.TTF                 # Standard font file for UI and Cost text
+├── assets/                   # Runtime assets — place the UI font (DejaVuSans.ttf) here
 ├── include/                  # Header declarations
 │   ├── aplicatie.h           # Main Application Engine
 │   ├── buton.h               # Custom GUI Button representation

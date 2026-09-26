@@ -1,4 +1,5 @@
 #include "../include/aplicatie.h"
+#include <stdexcept>
 
 Aplicatie::Aplicatie() :
 	window(sf::VideoMode::getDesktopMode(), "Grafuri", sf::State::Fullscreen),
@@ -10,7 +11,16 @@ Aplicatie::Aplicatie() :
 	meniuStart(layout, font),
 	meniuStanga(layout, font),
 	meniuDreapta(layout, font),
-	font("ARIAL.TTF"){ }
+	font()
+{
+	// Load the UI font. The `assets/` folder is copied next to the executable
+	// at build time (see CMakeLists.txt), so this relative path resolves at runtime.
+	if (!font.openFromFile("assets/DejaVuSans.ttf")) {
+		throw std::runtime_error(
+			"Could not load font 'assets/DejaVuSans.ttf'. "
+			"Make sure a .ttf file exists in the assets/ folder.");
+	}
+}
 
 void Aplicatie::ProceseazaElemente() {
 	while (const auto event = window.pollEvent()) {
