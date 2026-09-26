@@ -1,15 +1,17 @@
-# Interactive Graph Visualizer (`VizualizatorGrafuri`)
+# Interactive Graph Visualizer
 
-[![Language](https://img.shields.io/badge/Language-C%2B%2B17-blue.svg)](https://en.cppreference.com/w/cpp/17)
-[![Framework](https://img.shields.io/badge/Graphics-SFML_3.1.0-green.svg)](https://www.sfml-dev.org/)
-[![Build System](https://img.shields.io/badge/Build-CMake_3.28%2B-orange.svg)](https://cmake.org/)
-[![License](https://img.shields.io/badge/License-MIT-purple.svg)](#license)
+An interactive, real-time graph visualization application built in Modern C++ (C++17)
+using the SFML 3.x graphics library. It demonstrates object-oriented design, RAII-based
+memory management, custom event dispatching, and animated visualizations of core graph
+traversal and pathfinding algorithms.
 
-An interactive, real-time graph visualization application built in **Modern C++ (C++17)** using the **SFML 3.x** graphics library. This project was developed as a demonstration of software engineering best practices, showcasing **Object-Oriented Design (OOP)**, **robust memory management (RAII & Smart Pointers)**, **custom event dispatching**, and visual representations of core **graph traversal and pathfinding algorithms**.
+## Demo
 
----
+| BFS traversal | DFS traversal |
+|:---:|:---:|
+| <img src="data/bfs_animation.gif" alt="BFS traversal animation" width="360"> | <img src="data/dfs_animation.gif" alt="DFS traversal animation" width="360"> |
 
-## 🚀 Key Architectural & C++ Highlights
+## Key Architectural & C++ Highlights
 
 This project was structured to reflect standard production-grade C++ guidelines, specifically targeting memory safety, architectural decoupling, and clean design patterns.
 
@@ -82,9 +84,7 @@ if (const auto* mouseClicked = event->getIf<sf::Event::MouseButtonPressed>()) {
 }
 ```
 
----
-
-## 🧠 Algorithmic Suite
+## Algorithmic Suite
 
 The application implements and visualizes four core graph operations, displaying node search states dynamically (e.g., Unvisited, Selected, Active, Visited) alongside current path costs:
 
@@ -102,9 +102,7 @@ The application implements and visualizes four core graph operations, displaying
 4.  **A* Search**: Pathfinding algorithm that uses Dijkstra's base but integrates an **Euclidean Distance Heuristic** calculated dynamically from nodes' screen positions:
     $$\text{Heuristic}(n) = \sqrt{(x_n - x_{dest})^2 + (y_n - y_{dest})^2}$$
 
----
-
-## 🛠️ Features & Controls
+## Features & Controls
 
 The visualizer supports full graph editing and pathfinding executions.
 
@@ -118,9 +116,7 @@ The visualizer supports full graph editing and pathfinding executions.
 | **Reset Graph Mode** | Press `Z` | Deletes the graph and returns to the Main Menu. |
 | **Exit Visualizer** | Press `X` or Close Button | Terminate the application safely. |
 
----
-
-## ⚙️ Compilation & Setup
+## Compilation & Setup
 
 ### Prerequisites
 *   **C++ Compiler**: A compiler supporting C++17 or newer (MSVC 2022, GCC 9+, or Clang 10+).
@@ -157,9 +153,7 @@ The visualizer supports full graph editing and pathfinding executions.
     ./bin/main
     ```
 
----
-
-## 📂 Project Structure
+## Project Structure
 
 ```
 vizualizator_grafuri/
@@ -185,7 +179,5 @@ vizualizator_grafuri/
     └── nod.cpp               # Circle and hover effects logic
 ```
 
----
-
-## 📄 License
+## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
